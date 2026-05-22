@@ -125,8 +125,30 @@
       gap: 20px;
       height: 100vh;
       overflow: hidden;
+      padding-top: 20px;
     }
 
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--neutral-white);
+      border-bottom: 0.5px solid var(--neutral-border);
+      padding: 0 36px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      margin: -36px -36px 0;
+    }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--brand-deeper);
+      color: #fff;
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
     /* ── HEADER ── */
     .page-header h1 {
       font-size: 28px;
@@ -155,13 +177,13 @@
     }
     .filter-group label {
       font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 400;
+      color: var(--text-primary);
+      font-weight: 500;
     }
     .filter-input {
       display: flex;
       align-items: center;
-      background: var(--neutral-white);
+      background: #f4f3f1;
       border: 1px solid #c8c8c4;
       border-radius: 10px;
       padding: 9px 14px;
@@ -303,9 +325,9 @@
       pointer-events: none;
     }
     .map-marker-dot {
-      width: 12px; height: 12px;
+      width: 16px; height: 16px;
       border-radius: 50%;
-      border: 2px solid white;
+      border: 2.5px solid white;
     }
     .map-marker-dot.fire {
       background: #a32d2d;
@@ -326,12 +348,13 @@
       50%      { box-shadow: 0 0 0 6px rgba(186,117,23,0.1); }
     }
     .map-marker-label {
-      margin-top: 4px;
-      background: rgba(26,25,22,0.8);
+      margin-top: 5px;
+      background: rgba(26,25,22,0.85);
       color: white;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 5px;
       white-space: nowrap;
     }
 
@@ -495,7 +518,7 @@
     }
     .user-location.visible { display: flex; }
     .user-location-dot {
-      width: 18px; height: 18px;
+      width: 22px; height: 22px;
       background: #185FA5;
       border-radius: 50%;
       border: 3px solid white;
@@ -520,9 +543,9 @@
       margin-top: 6px;
       background: #185FA5;
       color: white;
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 99px;
       white-space: nowrap;
       box-shadow: 0 2px 6px rgba(24,95,165,0.35);
@@ -549,16 +572,7 @@
       transform: translateY(0) scale(1);
       pointer-events: all;
     }
-    .search-popover-tag {
-      font-size: 10px;
-      color: rgba(255,255,255,0.55);
-      background: #1a1916;
-      padding: 3px 8px;
-      border-radius: 6px 6px 0 0;
-      position: absolute;
-      top: -22px; left: 0;
-      font-weight: 400;
-    }
+
     .search-popover p {
       font-size: 14px;
       font-weight: 500;
@@ -833,6 +847,11 @@
 <!-- MAIN -->
 <main class="main">
 
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="avatar">VB</div>
+  </div>
+
   <!-- HEADER -->
   <div class="page-header">
     <h1>Mapa</h1>
@@ -936,7 +955,6 @@
 
     <!-- Search Popover -->
     <div class="search-popover" id="searchPopover">
-      <span class="search-popover-tag">Buscar Coordenada</span>
       <p>Insira a coordenada que deseja encontrar no mapa:</p>
       <input type="text" placeholder="-16.13021, -16.13021" id="searchInput" />
       <div class="search-popover-footer">
@@ -957,11 +975,11 @@
     <!-- Markers -->
     <div class="map-marker" style="top:36%;left:40%">
       <div class="map-marker-dot fire"></div>
-      <div class="map-marker-label">Incêndio ativo</div>
+      <div class="map-marker-label">Incêndio detectado</div>
     </div>
     <div class="map-marker" style="top:52%;left:63%">
       <div class="map-marker-dot fire"></div>
-      <div class="map-marker-label">Incêndio ativo</div>
+      <div class="map-marker-label">Incêndio detectado</div>
     </div>
     <div class="map-marker" style="top:26%;left:55%">
       <div class="map-marker-dot alert"></div>
@@ -973,7 +991,7 @@
     </div>
     <div class="map-marker" style="top:44%;left:72%">
       <div class="map-marker-dot fire"></div>
-      <div class="map-marker-label">Incêndio ativo</div>
+      <div class="map-marker-label">Incêndio detectado</div>
     </div>
   </div>
 
@@ -1086,9 +1104,6 @@
 <!-- IMPORT MODAL -->
 <div class="import-overlay" id="importOverlay" onclick="handleImportOverlayClick(event)">
   <div class="import-modal" id="importModal">
-    <div class="import-modal-header">
-      <span class="import-modal-tag">Importar Camada</span>
-    </div>
     <div class="import-modal-body">
       <h2 class="import-title">Importar Camada</h2>
 
@@ -1241,9 +1256,6 @@
 <!-- SAVE LAYER MODAL -->
 <div class="import-overlay" id="saveLayerOverlay" onclick="handleSaveLayerOverlayClick(event)">
   <div class="import-modal" id="saveLayerModal">
-    <div class="import-modal-header">
-      <span class="import-modal-tag">Salvar Camada</span>
-    </div>
     <div class="import-modal-body">
       <h2 class="import-title">Salvar Nova Camada no Mapa</h2>
       <div class="import-field">
