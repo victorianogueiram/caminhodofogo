@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Caminho do Fogo – Ações</title>
+  <title>Caminho do Fogo – Incêndios</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -314,6 +314,10 @@
     .dropdown-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.8; }
 
 
+
+    .badge-red    { background: var(--error-bg, #fcebeb); color: var(--error-default, #a32d2d); border: 1.5px solid #f0c0c0; }
+    .badge-status { display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap;border:1.5px solid transparent; }
+
     /* ── BADGES ── */
     .badge {
       display: inline-flex;
@@ -501,7 +505,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
     <span class="nav-label">Alertas</span><span class="tooltip">Alertas</span>
   </a>
-  <a href="incendios.html" class="nav-item">
+  <a href="incendios.html" class="nav-item active">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 3-5 4.5-5 9a5 5 0 0 0 10 0c0-4.5-3.5-6-5-9z"/><path d="M12 9c-.8 2-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-1.2-2-2-4z"/></svg>
     <span class="nav-label">Incêndios</span><span class="tooltip">Incêndios</span>
   </a>
@@ -612,8 +616,8 @@
 
     <!-- PAGE HEADER -->
     <div class="page-header">
-      <h1>Ações</h1>
-      <p>Você está visualizando as ações do período:</p>
+      <h1>Incêndios</h1>
+      <p>Você está visualizando incêndios do período:</p>
     </div>
 
     <!-- FILTERS -->
@@ -630,6 +634,17 @@
           <input type="date" value="2025-06-01" />
         </div>
       </div>
+      <div class="filter-group">
+        <label>Tipo de Incêndio</label>
+        <div class="filter-input" style="min-width:180px;padding:0;">
+          <select style="border:none;outline:none;background:transparent;font-family:Inter,sans-serif;font-size:13px;color:var(--text-primary);width:100%;padding:9px 14px;cursor:pointer;">
+            <option value="" disabled selected>Selecione</option>
+            <option>Incêndio Florestal</option>
+            <option>Incêndio de Vegetação</option>
+            <option>Incêndio em Interface</option>
+          </select>
+        </div>
+      </div>
       <button class="btn btn-outline">Limpar Filtro</button>
       <button class="btn btn-primary">Filtrar</button>
     </div>
@@ -638,7 +653,7 @@
     <div class="table-toolbar">
       <button class="btn-create">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Criar Ação
+        Criar Incêndio
       </button>
     </div>
 
@@ -647,270 +662,110 @@
       <table>
         <thead>
           <tr>
-            <th>Número</th>
-            <th>Início</th>
-            <th>Fim</th>
-            <th>Tipo de Ação</th>
+            <th>Status</th>
+            <th>Data</th>
             <th>Município</th>
+            <th>Tipo de Incêndio</th>
+            <th>Criado Por</th>
             <th>Brigada</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-blue">Educação Ambiental</span></td>
-            <td>Porto Alegre</td>
-            <td>Nome da Brigada</td>
-            <td><div class="row-actions">
-              <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
-            </div></td>
-          </tr>
-          <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-orange">Combate a Incêndio</span></td>
+            <td><span class="badge badge-status badge-red">Detectado</span></td>
+            <td>05/05/2026</td>
             <td>Alto Paraíso de Goiás</td>
+            <td>Incêndio Florestal</td>
+            <td>Joana Silva Sauro</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-green">Prevenção</span></td>
+            <td><span class="badge badge-status badge-yellow">Em Combate</span></td>
+            <td>05/05/2026</td>
             <td>Alto Paraíso de Goiás</td>
+            <td>Incêndio Florestal</td>
+            <td>Joana Silva Sauro</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-orange">Combate a Incêndio</span></td>
+            <td><span class="badge badge-status badge-green">Extinto</span></td>
+            <td>05/05/2026</td>
             <td>Alto Paraíso de Goiás</td>
+            <td>Incêndio Florestal</td>
+            <td>Joana Silva Sauro</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-yellow">Monitoramento</span></td>
-            <td>Porto Alegre</td>
+            <td><span class="badge badge-status badge-blue">Controlado</span></td>
+            <td>05/05/2026</td>
+            <td>Alto Paraíso de Goiás</td>
+            <td>Incêndio Florestal</td>
+            <td>Joana Silva Sauro</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-blue">Educação Ambiental</span></td>
+            <td><span class="badge badge-status badge-red">Detectado</span></td>
+            <td>05/05/2026</td>
             <td>Porto Alegre</td>
-            <td>Nome da Brigada</td>
+            <td>Incêndio de Vegetação</td>
+            <td>Carlos Mendes</td>
+            <td>Brigada Sul</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-green">Prevenção</span></td>
-            <td>Porto Alegre</td>
-            <td>Nome da Brigada</td>
+            <td><span class="badge badge-status badge-yellow">Em Combate</span></td>
+            <td>05/05/2026</td>
+            <td>Chapada dos Veadeiros</td>
+            <td>Incêndio em Interface</td>
+            <td>Ana Beatriz</td>
+            <td>Brigada Centro</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
           <tr>
-            <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
-            <td><span class="badge badge-orange">Combate a Incêndio</span></td>
+            <td><span class="badge badge-status badge-green">Extinto</span></td>
+            <td>05/05/2026</td>
             <td>Porto Alegre</td>
-            <td>Nome da Brigada</td>
+            <td>Incêndio Florestal</td>
+            <td>Pedro Alves</td>
+            <td>Brigada Norte</td>
             <td><div class="row-actions">
               <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-              <div class="dropdown-wrap">
-                <button class="row-icon" title="Mais opções" onclick="toggleDropdown(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Baixar KML
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar Novo Registro
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Editar Ação
-                  </a>
-                  <a class="dropdown-item danger" href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Excluir Ação
-                  </a>
-                </div>
-              </div>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+            </div></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-status badge-blue">Controlado</span></td>
+            <td>05/05/2026</td>
+            <td>Brasília</td>
+            <td>Incêndio de Vegetação</td>
+            <td>Maria Silva</td>
+            <td>Brigada Leste</td>
+            <td><div class="row-actions">
+              <button class="row-icon" title="Visualizar" onclick="window.location.href='detalhes-acao.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="row-icon" title="Baixar KML"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             </div></td>
           </tr>
         </tbody>
