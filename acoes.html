@@ -162,7 +162,7 @@
     .filter-input {
       display: flex;
       align-items: center;
-      background: #f4f3f1;
+      background: #ffffff;
       border: 1px solid #c8c8c4;
       border-radius: 10px;
       padding: 9px 14px;
@@ -171,7 +171,7 @@
       transition: border-color 0.15s;
     }
     .filter-input:hover { border-color: #aaa; }
-    .filter-input input[type="datetime-local"] {
+    .filter-input input[type="date"] {
       border: none; outline: none;
       font-family: 'Inter', sans-serif;
       font-size: 13px;
@@ -180,7 +180,7 @@
       cursor: pointer;
       width: 100%;
     }
-    .filter-input input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    .filter-input input[type="date"]::-webkit-calendar-picker-indicator {
       opacity: 0.45; cursor: pointer;
     }
     .btn {
@@ -213,25 +213,27 @@
       background: var(--neutral-white);
       border: 0.5px solid var(--neutral-border);
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible;
     }
     table {
       width: 100%;
       border-collapse: collapse;
     }
     thead tr {
-      background: #f7f6f3;
-      border-bottom: 0.5px solid var(--neutral-border);
+      background: #eae9e5;
+      border-bottom: 1px solid #d0cec9;
     }
     thead th {
       padding: 12px 16px;
       text-align: left;
       font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      letter-spacing: 0.2px;
+      font-weight: 700;
+      color: #4a4845;
+      letter-spacing: 0.3px;
       white-space: nowrap;
+      border-right: 0.5px solid #d0cec9;
     }
+    thead th:last-child { border-right: none; }
     tbody tr {
       border-bottom: 0.5px solid var(--neutral-border);
       transition: background 0.12s;
@@ -242,7 +244,9 @@
       padding: 14px 16px;
       font-size: 13px;
       color: var(--text-primary);
+      border-right: 0.5px solid var(--neutral-border);
     }
+    tbody td:last-child { border-right: none; }
 
     /* action icons */
     .row-actions {
@@ -266,18 +270,17 @@
 
     /* ── DROPDOWN MENU ── */
     .dropdown-wrap {
-      position: relative;
+      position: static;
     }
     .dropdown-menu {
-      position: absolute;
-      right: 0; top: calc(100% + 6px);
+      position: fixed;
       background: var(--neutral-white);
       border: 0.5px solid var(--neutral-border);
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06);
       min-width: 220px;
       overflow: hidden;
-      z-index: 50;
+      z-index: 9999;
       opacity: 0;
       transform: translateY(-4px) scale(0.98);
       pointer-events: none;
@@ -305,6 +308,87 @@
     .dropdown-item.danger { color: var(--error-default); }
     .dropdown-item.danger:hover { background: var(--error-bg); }
     .dropdown-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.8; }
+
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      border: 1.5px solid transparent;
+    }
+    .badge-blue   { background: #e6f1fb; color: #0c447c; border-color: #b8d4f0; }
+    .badge-yellow { background: #faeeda; color: #7a4f00; border-color: #f0d090; }
+    .badge-orange { background: var(--brand-light); color: var(--brand-deeper); border-color: #ffc5b0; }
+    .badge-green  { background: #eaf3de; color: #27500a; border-color: #b8d99a; }
+
+    /* ── TABLE TOOLBAR ── */
+    .table-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+    .btn-create {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--brand-default);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255,102,65,0.3);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-create:hover { background: #e5572e; transform: scale(1.02); }
+    .btn-create svg { width: 14px; height: 14px; }
+
+    /* ── PAGINATION ── */
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+      padding: 16px 0 4px;
+    }
+    .page-btn {
+      min-width: 36px; height: 36px;
+      border: 1px solid var(--neutral-border);
+      background: var(--neutral-white);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      gap: 4px;
+      padding: 0 10px;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .page-btn:hover { background: #f5f5f3; border-color: #bbb; }
+    .page-btn.active { background: #d0cdc8; border-color: #b0ada8; font-weight: 600; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .page-select {
+      height: 36px;
+      border: 1px solid var(--neutral-border);
+      background: var(--neutral-white);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text-primary);
+      padding: 0 10px;
+      cursor: pointer;
+      outline: none;
+    }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(8px); }
@@ -392,17 +476,25 @@
       <div class="filter-group">
         <label>Data Inicial</label>
         <div class="filter-input">
-          <input type="datetime-local" value="2025-06-01T11:15" />
+          <input type="date" value="2025-06-01" />
         </div>
       </div>
       <div class="filter-group">
         <label>Data Final</label>
         <div class="filter-input">
-          <input type="datetime-local" value="2025-06-01T11:15" />
+          <input type="date" value="2025-06-01" />
         </div>
       </div>
       <button class="btn btn-outline">Limpar Filtro</button>
       <button class="btn btn-primary">Filtrar</button>
+    </div>
+
+    <!-- TABLE TOOLBAR -->
+    <div class="table-toolbar">
+      <button class="btn-create">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Criar Ação
+      </button>
     </div>
 
     <!-- TABLE -->
@@ -424,7 +516,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Educação Ambiental</td>
+            <td><span class="badge badge-blue">Educação Ambiental</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -456,7 +548,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Combate a Incêndio</td>
+            <td><span class="badge badge-orange">Combate a Incêndio</span></td>
             <td>Alto Paraíso de Goiás</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -488,7 +580,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Combate a Incêndio</td>
+            <td><span class="badge badge-green">Prevenção</span></td>
             <td>Alto Paraíso de Goiás</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -520,7 +612,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Combate a Incêndio</td>
+            <td><span class="badge badge-orange">Combate a Incêndio</span></td>
             <td>Alto Paraíso de Goiás</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -552,7 +644,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Educação Ambiental</td>
+            <td><span class="badge badge-yellow">Monitoramento</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -584,7 +676,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Educação Ambiental</td>
+            <td><span class="badge badge-blue">Educação Ambiental</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -616,7 +708,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Combate a Incêndio</td>
+            <td><span class="badge badge-green">Prevenção</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -648,7 +740,7 @@
             <td>1234</td>
             <td>05/05/2026 15:47</td>
             <td>05/05/2026 15:47</td>
-            <td>Combate a Incêndio</td>
+            <td><span class="badge badge-orange">Combate a Incêndio</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
             <td><div class="row-actions">
@@ -680,6 +772,22 @@
       </table>
     </div>
 
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <select class="page-select">
+        <option>50</option>
+        <option>25</option>
+        <option>100</option>
+      </select>
+      <button class="page-btn" disabled>&#8249; Voltar</button>
+      <button class="page-btn">1</button>
+      <button class="page-btn active">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">4</button>
+      <button class="page-btn">5</button>
+      <button class="page-btn">Próximo &#8250;</button>
+    </div>
+
   </div><!-- /content -->
 </main>
 
@@ -690,11 +798,15 @@ function toggleSidebar() {
 }
 
 function toggleDropdown(btn) {
-  const menu = btn.nextElementSibling;
-  const isOpen = menu.classList.contains('open');
-  // close all open dropdowns first
-  document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
-  if (!isOpen) menu.classList.add('open');
+  const allMenus = document.querySelectorAll('.dropdown-menu.open');
+  allMenus.forEach(m => m.classList.remove('open'));
+
+  const wrap = btn.parentElement;
+  const menu = wrap.querySelector('.dropdown-menu');
+  const rect = btn.getBoundingClientRect();
+  menu.style.top = (rect.bottom + 6) + 'px';
+  menu.style.right = (window.innerWidth - rect.right) + 'px';
+  menu.classList.add('open');
 }
 
 // close dropdown when clicking outside
