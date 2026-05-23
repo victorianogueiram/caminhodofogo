@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caminho do Fogo – Detalhes da Ação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand-deeper: #7a2000;
+      --brand-default: #ff6641;
+      --brand-light: #ffe9e3;
+      --neutral-white: #ffffff;
+      --neutral-border: #e5e5e3;
+      --text-primary: #1a1916;
+      --text-secondary: #7a7975;
+      --text-dark: #272727;
+      --sidebar-width: 210px;
+      --sidebar-collapsed: 60px;
+      --error-default: #a32d2d;
+      --error-bg: #fcebeb;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #faf9f7;
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--neutral-white);
+      border-right: 0.5px solid var(--neutral-border);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 10;
+      transition: width 0.25s ease;
+      overflow: hidden;
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-top {
+      display: flex; align-items: center; gap: 10px;
+      padding: 4px 4px 14px;
+      border-bottom: 0.5px solid var(--neutral-border);
+      margin-bottom: 8px; flex-shrink: 0;
+    }
+    .hamburger {
+      width: 32px; height: 32px; border: none; background: transparent;
+      cursor: pointer; border-radius: 6px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; flex-shrink: 0; transition: background 0.15s;
+    }
+    .hamburger:hover { background: #f0f0ee; }
+    .hamburger span { display: block; width: 18px; height: 1.5px; background: var(--text-primary); border-radius: 2px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px; padding: 9px 10px;
+      border-radius: 8px; cursor: pointer; text-decoration: none;
+      color: var(--text-dark); font-size: 14px; font-weight: 400;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap; position: relative; overflow: visible;
+    }
+    .nav-item:hover { background: #faf9f7; }
+    .nav-item.active { background: var(--brand-light); color: var(--brand-deeper); font-weight: 500; }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; opacity: 0.7; }
+    .nav-item.active svg { opacity: 1; }
+    .nav-label { transition: opacity 0.15s; white-space: nowrap; }
+    .sidebar.collapsed .nav-label { opacity: 0; pointer-events: none; width: 0; }
+    .sidebar.collapsed .nav-item { justify-content: center; padding: 9px 0; gap: 0; }
+    .nav-item .tooltip {
+      position: absolute; left: calc(100% + 12px); top: 50%; transform: translateY(-50%);
+      background: var(--text-primary); color: white; font-size: 12px; font-weight: 500;
+      padding: 5px 10px; border-radius: 6px; white-space: nowrap;
+      pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 200;
+    }
+    .nav-item .tooltip::before {
+      content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+      border: 5px solid transparent; border-right-color: var(--text-primary);
+    }
+    .sidebar.collapsed .nav-item:hover .tooltip { opacity: 1; }
+    .nav-spacer { flex: 1; }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      transition: margin-left 0.25s ease;
+    }
+    .main.collapsed { margin-left: var(--sidebar-collapsed); }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--neutral-white);
+      border-bottom: 0.5px solid var(--neutral-border);
+      padding: 0 36px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--brand-deeper);
+      color: #fff;
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      padding: 32px 36px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+    }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-edit {
+      padding: 9px 22px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      background: var(--neutral-white);
+      border: 1.5px solid var(--brand-default);
+      color: var(--brand-default);
+      transition: background 0.15s;
+    }
+    .btn-edit:hover { background: #fff0ec; }
+    .btn-new {
+      padding: 9px 22px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      background: var(--brand-default);
+      border: none;
+      color: white;
+      box-shadow: 0 2px 8px rgba(255,102,65,0.3);
+      transition: background 0.15s;
+    }
+    .btn-new:hover { background: #e5572e; }
+
+    /* ── INFO SECTIONS ── */
+    .info-section {
+      padding: 28px 0;
+      border-bottom: 0.5px solid var(--neutral-border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 48px;
+    }
+    .info-section:first-child { padding-top: 0; }
+    .info-section:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-section.full { grid-template-columns: 1fr; }
+
+    .info-field { display: flex; flex-direction: column; gap: 3px; }
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .info-value {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+    .info-value.small {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .info-value a {
+      color: var(--brand-default);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 13px;
+      margin-left: 10px;
+    }
+    .info-value a:hover { text-decoration: underline; }
+
+    .info-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 16px;
+      grid-column: 1 / -1;
+    }
+
+    .btn-ver-mapa {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--brand-default);
+      color: var(--brand-default);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      background: var(--neutral-white);
+      transition: background 0.15s;
+      text-decoration: none;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    .btn-ver-mapa:hover { background: #fff0ec; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      background: #eaf3de;
+      color: #27500a;
+      border: 1.5px solid #b8d99a;
+      width: fit-content;
+    }
+
+    /* ── MAP PLACEHOLDER ── */
+    .map-placeholder {
+      width: 100%;
+      height: 200px;
+      background: #d6e8d0;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      margin-top: 8px;
+      border: 1px solid var(--neutral-border);
+    }
+    .map-placeholder svg { width: 100%; height: 100%; }
+    .map-zoom-mini {
+      position: absolute;
+      top: 10px; right: 10px;
+      display: flex; flex-direction: column;
+      border-radius: 6px; overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .map-zoom-mini button {
+      width: 26px; height: 26px;
+      background: white; border: none; cursor: pointer;
+      font-size: 16px; color: #444;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-zoom-mini button:first-child { border-bottom: 0.5px solid #ddd; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      padding-bottom: 32px;
+      position: relative;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .timeline-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--brand-default);
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px var(--brand-default);
+      margin-top: 4px;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .timeline-dot.dark {
+      background: var(--text-primary);
+      box-shadow: 0 0 0 2px var(--text-primary);
+    }
+    .timeline-line {
+      width: 1.5px;
+      flex: 1;
+      background: var(--neutral-border);
+      margin-top: 6px;
+    }
+    .timeline-item:last-child .timeline-line { display: none; }
+    .timeline-body { flex: 1; padding-top: 0; }
+    .timeline-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .timeline-meta strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .timeline-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .timeline-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .timeline-coord {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .timeline-divider {
+      border: none;
+      border-top: 0.5px solid var(--neutral-border);
+      margin: 16px 0 0;
+    }
+    .timeline-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--brand-default);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .timeline-tag svg { width: 16px; height: 16px; }
+    .timeline-photos {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .timeline-photo {
+      width: 120px; height: 90px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #c8c0b0;
+      border: 0.5px solid var(--neutral-border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .timeline-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-placeholder {
+      width: 120px; height: 90px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #b8b0a0, #9a9080);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .photo-placeholder svg { width: 28px; height: 28px; opacity: 0.4; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .info-card { animation: fadeUp 0.3s ease both; }
+    .info-card:nth-child(2) { animation-delay: 0.05s; }
+    .timeline-item { animation: fadeUp 0.3s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <button class="hamburger" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <a href="index.html" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    <span class="nav-label">Painel</span><span class="tooltip">Painel</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <span class="nav-label">Perfil</span><span class="tooltip">Perfil</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <span class="nav-label">Alertas</span><span class="tooltip">Alertas</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 3-5 4.5-5 9a5 5 0 0 0 10 0c0-4.5-3.5-6-5-9z"/><path d="M12 9c-.8 2-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-1.2-2-2-4z"/></svg>
+    <span class="nav-label">Incêndios</span><span class="tooltip">Incêndios</span>
+  </a>
+  <a href="acoes.html" class="nav-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="14" y2="13"/></svg>
+    <span class="nav-label">Ações</span><span class="tooltip">Ações</span>
+  </a>
+  <a href="mapa.html" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4m0 13V4M9 7l6-3"/></svg>
+    <span class="nav-label">Mapas</span><span class="tooltip">Mapas</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <span class="nav-label">Relatórios</span><span class="tooltip">Relatórios</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M6.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="19" cy="8" r="2"/><path d="M22 20c0-2-1.3-3.5-3-4"/><circle cx="5" cy="8" r="2"/><path d="M2 20c0-2 1.3-3.5 3-4"/></svg>
+    <span class="nav-label">Apoiadores</span><span class="tooltip">Apoiadores</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/><path d="M17 13c2 0 4 1.3 4 3.5"/></svg>
+    <span class="nav-label">Brigadas</span><span class="tooltip">Brigadas</span>
+  </a>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M16 3.5a2 2 0 0 1 0 3.5"/></svg>
+    <span class="nav-label">Brigadistas</span><span class="tooltip">Brigadistas</span>
+  </a>
+  <div class="nav-spacer"></div>
+  <a href="#" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    <span class="nav-label">Sair</span><span class="tooltip">Sair</span>
+  </a>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="main">
+
+  <div class="topbar">
+    <div class="avatar">VB</div>
+  </div>
+
+  <div class="content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1>Detalhes da Ação</h1>
+      <div class="header-actions">
+        <button class="btn-edit">Editar Ação</button>
+        <button class="btn-new">+ Novo Registro</button>
+      </div>
+    </div>
+
+    <!-- INFO SECTIONS -->
+    <div>
+
+      <!-- BLOCO 1: Dados da ação -->
+      <div class="info-section">
+        <div class="info-field">
+          <span class="info-label">Tipo de Ação</span>
+          <span class="info-value">Combate a Incêndio</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Criado por</span>
+          <span class="info-value">Joana Silva Sauro de Mendonça Filha</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Status da Ação</span>
+          <span class="status-badge">Combatido</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Data da Ação</span>
+          <span class="info-value">05/05/2026 15:47:34</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Fim da Ação</span>
+          <span class="info-value">05/05/2026 08:00:00</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Integrado</span>
+          <span class="info-value">Não Integrado</span>
+        </div>
+      </div>
+
+      <!-- BLOCO 2: Localização -->
+      <div class="info-section">
+        <div class="info-field">
+          <span class="info-label">Local</span>
+          <span class="info-value">Alto Paraíso de Goiás - GO</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Município</span>
+          <span class="info-value">Alto Paraíso de Goiás - GO</span>
+        </div>
+        <div class="info-field" style="grid-column: 1 / -1;">
+          <span class="info-label">Coordenadas</span>
+          <span class="info-value">
+            -14.115318632900177, -47.58365369652679
+            <a href="mapa.html" class="btn-ver-mapa">Ver no mapa</a>
+          </span>
+        </div>
+      </div>
+
+      <!-- BLOCO 3: Brigadistas -->
+      <div class="info-section">
+        <div class="info-field">
+          <span class="info-label">Brigada</span>
+          <span class="info-value">Cerrado de Pé</span>
+        </div>
+        <div class="info-field">
+          <span class="info-label">Brigadistas Atuando</span>
+          <span class="info-value">12 brigadistas</span>
+        </div>
+        <div class="info-field" style="grid-column: 1 / -1;">
+          <span class="info-label">Brigadistas</span>
+          <span class="info-value">Valdeci Da Silva Carvalho</span>
+        </div>
+      </div>
+
+      <!-- BLOCO 4: Mapa -->
+      <div class="info-section full">
+        <div class="info-field">
+          <span class="info-label">Pontos de Ações</span>
+          <div class="map-placeholder" style="margin-top:10px;">
+            <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+              <rect width="800" height="220" fill="#ddecd5"/>
+              <path d="M0 80 Q120 55 240 95 Q360 135 480 85 Q600 45 720 75 Q760 80 800 78" stroke="#a8c8a0" stroke-width="2" fill="none"/>
+              <path d="M340 0 Q348 70 345 140 Q342 180 347 220" stroke="#9ec4f8" stroke-width="3" fill="none" opacity="0.6"/>
+              <rect x="100" y="85" width="55" height="32" rx="4" fill="#b8ccb0" opacity="0.45"/>
+              <rect x="380" y="105" width="42" height="26" rx="4" fill="#b8ccb0" opacity="0.45"/>
+              <rect x="560" y="70" width="48" height="30" rx="4" fill="#b8ccb0" opacity="0.35"/>
+              <circle cx="346" cy="105" r="8" fill="#ff6641" opacity="0.95"/>
+              <circle cx="346" cy="105" r="15" fill="#ff6641" opacity="0.18"/>
+            </svg>
+            <div class="map-zoom-mini">
+              <button>+</button>
+              <button>−</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div>
+      <p class="section-title">Histórico da Ação</p>
+    </div>
+
+    <div style="padding: 0;">
+      <div class="timeline">
+
+        <!-- Item 1 -->
+        <div class="timeline-item">
+          <div class="timeline-left">
+            <div class="timeline-dot"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-title">Trilha <span style="font-weight:400;color:var(--text-secondary);">– 05/05/2026 15:48</span></div>
+            <p class="timeline-text">Combate em andamento, estamos em deslocamento para a parte Leste da área afetada. Equipe de 4 brigadistas no local.</p>
+            <div class="timeline-coord">Coord: -14.115319, -47.583654</div>
+            <div class="timeline-photos">
+              <div class="photo-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <div class="photo-placeholder" style="background: linear-gradient(135deg, #9a8878, #7a6858);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+            </div>
+            <hr class="timeline-divider" />
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="timeline-item">
+          <div class="timeline-left">
+            <div class="timeline-dot dark"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-title">Fauna Abatida <span style="font-weight:400;color:var(--text-secondary);">– 05/05/2026 16:10</span></div>
+            <div class="timeline-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3"/><path d="M6.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="19" cy="8" r="2"/><path d="M22 20c0-2-1.3-3.5-3-4"/></svg>
+              Fauna Abatida
+            </div>
+            <p class="timeline-text">Registro de fauna afetada pelo incêndio na área de atuação. Coordenação com equipe de fauna para coleta e triagem dos animais encontrados.</p>
+            <div class="timeline-coord">Coord: -14.115319, -47.583654</div>
+            <div class="timeline-photos">
+              <div class="photo-placeholder" style="background: linear-gradient(135deg, #8a7060, #6a5040);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+            </div>
+            <hr class="timeline-divider" />
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="timeline-item">
+          <div class="timeline-left">
+            <div class="timeline-dot"></div>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-title">Início da Ação <span style="font-weight:400;color:var(--text-secondary);">– 05/05/2026 15:47</span></div>
+            <p class="timeline-text">Ação de Educação Ambiental iniciada no município de Alto Paraíso de Goiás. Equipe mobilizada e deslocamento confirmado.</p>
+            <div class="timeline-coord">Coord: -14.115319, -47.583654</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+  document.getElementById('main').classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>
