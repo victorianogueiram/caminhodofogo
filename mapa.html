@@ -119,97 +119,13 @@
     .main {
       margin-left: var(--sidebar-width); transition: margin-left 0.25s ease;
       flex: 1;
-      padding: 36px 36px 0;
       display: flex;
       flex-direction: column;
-      gap: 20px;
       height: 100vh;
       overflow: hidden;
-      padding-top: 20px;
     }
 
-    /* ── TOPBAR ── */
-    .topbar {
-      background: var(--neutral-white);
-      border-bottom: 0.5px solid var(--neutral-border);
-      padding: 0 36px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-shrink: 0;
-      margin: -36px -36px 0;
-    }
-    .avatar {
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      background: var(--brand-deeper);
-      color: #fff;
-      font-size: 13px; font-weight: 600;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    /* ── HEADER ── */
-    .page-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text-primary);
-    }
-    .page-header p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-      font-weight: 400;
-    }
-
-    /* ── FILTERS ── */
-    .filters {
-      display: flex;
-      align-items: flex-end;
-      gap: 12px;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .filter-group label {
-      font-size: 12px;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-    .filter-input {
-      display: flex;
-      align-items: center;
-      background: #f4f3f1;
-      border: 1px solid #c8c8c4;
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      color: var(--text-primary);
-      transition: border-color 0.15s;
-      min-width: 200px;
-      gap: 8px;
-    }
-    .filter-input:hover { border-color: #aaa; }
-    .filter-input input[type="datetime-local"] {
-      border: none;
-      outline: none;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      color: var(--text-primary);
-      background: transparent;
-      cursor: pointer;
-      width: 100%;
-    }
-    .filter-input input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-      opacity: 0.45;
-      cursor: pointer;
-    }
-
+    /* ── BTN ── */
     .btn {
       padding: 9px 22px;
       border-radius: 999px;
@@ -239,7 +155,6 @@
     .map-wrapper {
       flex: 1;
       position: relative;
-      border-radius: 16px 16px 0 0;
       overflow: hidden;
       min-height: 0;
     }
@@ -258,28 +173,33 @@
       pointer-events: none;
     }
 
-    /* zoom controls */
-    .map-zoom {
+    /* ── LEFT TOOLBAR (Camadas + Datas) ── */
+    .map-toolbar-left {
       position: absolute;
       top: 14px; left: 14px;
-      display: flex; flex-direction: column;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      display: flex;
+      gap: 6px;
+      z-index: 1000;
     }
-    .map-zoom-btn {
-      width: 28px; height: 28px;
-      background: var(--brand-light);
+    .map-tag-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--brand-deeper);
       border: none;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      color: var(--brand-deeper);
-      transition: background 0.12s;
+      color: var(--brand-light);
       font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      transition: background 0.12s, transform 0.1s;
     }
-    .map-zoom-btn:hover { background: #ffd5c9; }
-    .map-zoom-btn:first-child { border-bottom: 0.5px solid rgba(122,32,0,0.15); }
+    .map-tag-btn:hover { background: #5e1800; transform: scale(1.02); }
+    .map-tag-btn.active { background: var(--brand-default); }
+    .map-tag-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     /* toolbar */
     .map-toolbar {
@@ -288,11 +208,11 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      background: rgba(255, 233, 227, 0.85);
+      background: rgba(255, 233, 227, 0.92);
       backdrop-filter: blur(8px);
       padding: 5px 8px;
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
       z-index: 1000;
     }
     .toolbar-btn {
@@ -371,7 +291,7 @@
     .layers-panel {
       position: absolute;
       top: 60px;
-      right: 14px;
+      left: 14px;
       width: 300px;
       background: var(--neutral-white);
       border-radius: 16px;
@@ -379,7 +299,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 120px);
+      max-height: calc(100% - 80px);
       opacity: 0;
       transform: translateY(-8px) scale(0.97);
       transition: opacity 0.2s ease, transform 0.2s ease;
@@ -600,6 +520,108 @@
       gap: 8px;
     }
 
+    /* ── DATAS MODAL ── */
+    .datas-overlay {
+      display: none;
+    }
+    .datas-modal-inner {
+      position: absolute;
+      top: 60px;
+      left: 130px;
+      width: 320px;
+      background: var(--neutral-white);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+      z-index: 1001;
+    }
+    .datas-modal-inner.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+    .datas-modal h2 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      text-align: center;
+    }
+    .datas-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .datas-field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .datas-input {
+      border: 1px solid #c8c8c4;
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      outline: none;
+      width: 100%;
+      background: white;
+      transition: border-color 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .datas-input input[type="date"] {
+      border: none; outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: transparent;
+      width: 100%;
+      cursor: pointer;
+    }
+    .datas-input input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.5; }
+    .datas-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .datas-btn-cancel {
+      background: transparent;
+      border: 1.5px solid var(--brand-default);
+      color: var(--brand-default);
+      border-radius: 999px;
+      padding: 10px 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .datas-btn-cancel:hover { background: #fff0ec; }
+    .datas-btn-confirm {
+      background: var(--brand-default);
+      border: none;
+      color: white;
+      border-radius: 999px;
+      padding: 10px 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255,102,65,0.35);
+      transition: background 0.15s;
+    }
+    .datas-btn-confirm:hover { background: #e5572e; }
+
     /* ── IMPORT MODAL ── */
     .import-overlay {
       position: fixed;
@@ -646,10 +668,10 @@
       gap: 20px;
     }
     .import-title {
-      font-size: 26px;
+      font-size: 17px;
       font-weight: 600;
-      letter-spacing: -0.4px;
-      line-height: 1.2;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
       color: var(--text-primary);
     }
     .import-field {
@@ -845,46 +867,23 @@
 </aside>
 
 <!-- MAIN -->
-<main class="main">
-
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="avatar">VB</div>
-  </div>
-
-  <!-- HEADER -->
-  <div class="page-header">
-    <h1>Mapa</h1>
-    <p>O mapa exibe o local das ações do período:</p>
-  </div>
-
-  <!-- FILTERS -->
-  <div class="filters">
-    <div class="filter-group">
-      <label>Data Inicial</label>
-      <div class="filter-input">
-        <input type="datetime-local" value="2025-06-01T11:15" />
-      </div>
-    </div>
-    <div class="filter-group">
-      <label>Data Final</label>
-      <div class="filter-input">
-        <input type="datetime-local" value="2025-06-01T11:15" />
-      </div>
-    </div>
-    <button class="btn btn-outline">Limpar Filtro</button>
-    <button class="btn btn-primary">Filtrar</button>
-  </div>
+<main class="main" id="main">
 
   <!-- MAP -->
   <div class="map-wrapper">
     <img class="map-bg" src="https://www.figma.com/api/mcp/asset/a44ee334-db94-4426-9a7c-3d49ca041b2e" alt="Mapa de satélite" />
     <div class="map-overlay"></div>
 
-    <!-- Zoom -->
-    <div class="map-zoom">
-      <button class="map-zoom-btn">+</button>
-      <button class="map-zoom-btn">−</button>
+    <!-- Left Toolbar -->
+    <div class="map-toolbar-left">
+      <button class="map-tag-btn" id="layersBtn" onclick="toggleLayersPanel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        Camadas
+      </button>
+      <button class="map-tag-btn" id="datasBtn" onclick="toggleDatasModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Datas
+      </button>
     </div>
 
     <!-- Toolbar -->
@@ -898,14 +897,6 @@
           <line x1="2" y1="12" x2="6" y2="12"/>
           <line x1="18" y1="12" x2="22" y2="12"/>
           <circle cx="12" cy="12" r="1.5" fill="#7a2000"/>
-        </svg>
-      </button>
-      <!-- Camadas -->
-      <button id="layersBtn" class="toolbar-btn" title="Camadas">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-          <polyline points="2 17 12 22 22 17"/>
-          <polyline points="2 12 12 17 22 12"/>
         </svg>
       </button>
       <!-- Lupa -->
@@ -935,6 +926,12 @@
           <circle cx="3" cy="20" r="1.5" fill="#ffe9e3" stroke="none"/>
         </svg>
       </button>
+      <!-- Círculo -->
+      <button class="toolbar-btn" title="Círculo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9e3" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="9"/>
+        </svg>
+      </button>
       <!-- Seleção de área (retângulo com alças) -->
       <button id="areaBtn" class="toolbar-btn" title="Selecionar área">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9e3" stroke-width="2" stroke-linecap="round">
@@ -949,6 +946,14 @@
       <button id="drawBtn" class="toolbar-btn" title="Desenhar">
         <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+        </svg>
+      </button>
+      <!-- Tesoura -->
+      <button class="toolbar-btn" title="Recortar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+          <line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/>
+          <line x1="8.12" y1="8.12" x2="12" y2="12"/>
         </svg>
       </button>
     </div>
@@ -993,271 +998,139 @@
       <div class="map-marker-dot fire"></div>
       <div class="map-marker-label">Incêndio detectado</div>
     </div>
+
+    <!-- DATAS MODAL -->
+    <div class="datas-modal-inner" id="datasModal">
+      <h2 style="font-size:17px;font-weight:600;letter-spacing:-0.2px;">Filtrar Ações</h2>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <label style="font-size:13px;font-weight:500;color:var(--text-primary);">Data Inicial</label>
+        <div style="border:1px solid #c8c8c4;border-radius:10px;padding:12px 14px;background:white;">
+          <input type="date" value="2025-06-01" style="border:none;outline:none;font-family:Inter,sans-serif;font-size:14px;color:var(--text-primary);background:transparent;width:100%;cursor:pointer;" />
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <label style="font-size:13px;font-weight:500;color:var(--text-primary);">Data Final</label>
+        <div style="border:1px solid #c8c8c4;border-radius:10px;padding:12px 14px;background:white;">
+          <input type="date" value="2025-06-01" style="border:none;outline:none;font-family:Inter,sans-serif;font-size:14px;color:var(--text-primary);background:transparent;width:100%;cursor:pointer;" />
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:4px;">
+        <button class="datas-btn-cancel" onclick="closeDatasModal()">Cancelar</button>
+        <button class="datas-btn-confirm" onclick="closeDatasModal()">Filtrar</button>
+      </div>
+    </div>
+
+    <div class="layers-panel" id="layersPanel">
+        <div class="layers-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <h3>Painel de Camadas</h3>
+        </div>
+    
+        <div class="layers-body">
+          <!-- AÇÕES MIF -->
+          <div class="layers-group">
+            <div class="layers-group-header" onclick="toggleGroup(this)">
+              <span>Ações MIF</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            </div>
+            <div class="layers-group-items">
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Alertas</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Focos de Incêndio</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Ações</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Brigadistas</span>
+              </div>
+            </div>
+          </div>
+    
+          <!-- BASE CARTOGRÁFICA -->
+          <div class="layers-group">
+            <div class="layers-group-header" onclick="toggleGroup(this)">
+              <span>Base Cartográfica Nacional</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            </div>
+            <div class="layers-group-items">
+              <div class="layer-item inactive" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                <span class="layer-name">Risco de Incêndio - Dia Atual</span>
+              </div>
+              <div class="layer-item inactive" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                <span class="layer-name">Risco de Incêndio - +1 Dia</span>
+              </div>
+              <div class="layer-item inactive" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                <span class="layer-name">Risco de Incêndio - +2 Dias</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Risco de Incêndio - +3 Dias</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Focos de Calor</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Pq. Nac. Chapada dos Veadeiros</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Assentamentos INCRA</span>
+              </div>
+              <div class="layer-item active" onclick="toggleLayer(this)">
+                <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="layer-name">Municípios IBGF</span>
+              </div>
+            </div>
+          </div>
+    
+          <!-- OUTRAS BASES -->
+          <div class="layers-group">
+            <div class="layers-group-header collapsed" onclick="toggleGroup(this)">
+              <span>Nome de Outra Base de Dados</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            </div>
+            <div class="layers-group-items hidden"></div>
+          </div>
+          <div class="layers-group">
+            <div class="layers-group-header collapsed" onclick="toggleGroup(this)">
+              <span>Nome de Outra Base de Dados</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            </div>
+            <div class="layers-group-items hidden"></div>
+          </div>
+        </div>
+    
+        <div class="layers-footer">
+          <div class="layers-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="activeCount">4 camadas ativas</span>
+          </div>
+          <button class="btn-aplicar" onclick="closePanel()">Aplicar</button>
+        </div>
+      </div>
   </div>
 
 </main>
 
-<!-- LAYERS MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="layers-panel" id="layersPanel">
-    <div class="layers-header">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-      <h3>Exibição dados</h3>
-    </div>
 
-    <div class="layers-body">
-      <!-- AÇÕES MIF -->
-      <div class="layers-group">
-        <div class="layers-group-header" onclick="toggleGroup(this)">
-          <span>Ações MIF</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-        </div>
-        <div class="layers-group-items">
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Alertas</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Focos de Incêndio</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Ações</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Brigadistas</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- BASE CARTOGRÁFICA -->
-      <div class="layers-group">
-        <div class="layers-group-header" onclick="toggleGroup(this)">
-          <span>Base Cartográfica Nacional</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-        </div>
-        <div class="layers-group-items">
-          <div class="layer-item inactive" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            <span class="layer-name">Risco de Incêndio - Dia Atual</span>
-          </div>
-          <div class="layer-item inactive" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            <span class="layer-name">Risco de Incêndio - +1 Dia</span>
-          </div>
-          <div class="layer-item inactive" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            <span class="layer-name">Risco de Incêndio - +2 Dias</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Risco de Incêndio - +3 Dias</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Focos de Calor</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Pq. Nac. Chapada dos Veadeiros</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Assentamentos INCRA</span>
-          </div>
-          <div class="layer-item active" onclick="toggleLayer(this)">
-            <svg class="layer-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="layer-name">Municípios IBGF</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- OUTRAS BASES -->
-      <div class="layers-group">
-        <div class="layers-group-header collapsed" onclick="toggleGroup(this)">
-          <span>Nome de Outra Base de Dados</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-        </div>
-        <div class="layers-group-items hidden"></div>
-      </div>
-      <div class="layers-group">
-        <div class="layers-group-header collapsed" onclick="toggleGroup(this)">
-          <span>Nome de Outra Base de Dados</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-        </div>
-        <div class="layers-group-items hidden"></div>
-      </div>
-    </div>
-
-    <div class="layers-footer">
-      <div class="layers-count">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="activeCount">4 camadas ativas</span>
-      </div>
-      <button class="btn-aplicar" onclick="closePanel()">Aplicar</button>
-    </div>
-  </div>
-</div>
-
-<!-- IMPORT MODAL -->
-<div class="import-overlay" id="importOverlay" onclick="handleImportOverlayClick(event)">
-  <div class="import-modal" id="importModal">
-    <div class="import-modal-body">
-      <h2 class="import-title">Importar Camada</h2>
-
-      <div class="import-field">
-        <label class="import-label">Nome</label>
-        <input type="text" class="import-input" placeholder="" />
-      </div>
-
-      <div class="import-upload-wrap">
-        <button class="import-upload-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Enviar arquivo
-        </button>
-        <p class="import-hint">Tipos de arquivos: shapefile (.zip) e arquivos.kml</p>
-      </div>
-
-      <div class="import-checkboxes">
-        <label class="import-check-item">
-          <div class="import-checkbox checked" onclick="toggleCheck(this)">
-            <span class="cb-checkmark"></span>
-          </div>
-          <span>Exibir camada no mapa por padrão</span>
-        </label>
-        <label class="import-check-item">
-          <div class="import-checkbox checked" onclick="toggleCheck(this)">
-            <span class="cb-checkmark"></span>
-          </div>
-          <span>Publicar na base da brigada</span>
-        </label>
-      </div>
-    </div>
-
-    <div class="import-footer">
-      <button class="import-btn-cancel" onclick="closeImportModal()">Cancelar</button>
-      <button class="import-btn-confirm">Buscar</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  // ── LOCATE BUTTON ──
-  const locateBtn = document.getElementById('locateBtn');
-  const userLocation = document.getElementById('userLocation');
-
-  locateBtn.addEventListener('click', () => {
-    locateBtn.classList.add('active-layer');
-    userLocation.style.top = '52%';
-    userLocation.style.left = '38%';
-    userLocation.classList.add('visible');
-    setTimeout(() => locateBtn.classList.remove('active-layer'), 800);
-  });
-
-  // ── LAYERS PANEL ──
-  const layersBtn = document.getElementById('layersBtn');
-  const layersPanel = document.getElementById('layersPanel');
-  const modalOverlay = document.getElementById('modalOverlay');
-
-  function openPanel() {
-    layersPanel.classList.add('open');
-    modalOverlay.classList.add('open');
-    layersBtn.classList.add('active-layer');
-  }
-  function closePanel() {
-    layersPanel.classList.remove('open');
-    modalOverlay.classList.remove('open');
-    layersBtn.classList.remove('active-layer');
-  }
-  layersBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    layersPanel.classList.contains('open') ? closePanel() : openPanel();
-  });
-  modalOverlay.addEventListener('click', (e) => {
-    if (!layersPanel.contains(e.target)) closePanel();
-  });
-
-  function toggleGroup(header) {
-    header.classList.toggle('collapsed');
-    header.nextElementSibling.classList.toggle('hidden');
-  }
-  function toggleLayer(item) {
-    item.classList.toggle('active');
-    item.classList.toggle('inactive');
-    updateCount();
-  }
-  function updateCount() {
-    const active = document.querySelectorAll('.layer-item.active').length;
-    document.getElementById('activeCount').textContent = active + ' camada' + (active !== 1 ? 's' : '') + ' ativa' + (active !== 1 ? 's' : '');
-  }
-
-  // ── SEARCH POPOVER ──
-  const searchBtn = document.getElementById('searchBtn');
-  const searchPopover = document.getElementById('searchPopover');
-
-  searchBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isOpen = searchPopover.classList.contains('open');
-    closeSearchPopover();
-    if (!isOpen) {
-      searchPopover.classList.add('open');
-      searchBtn.classList.add('active-layer');
-      setTimeout(() => document.getElementById('searchInput').focus(), 50);
-    }
-  });
-
-  function closeSearchPopover() {
-    searchPopover.classList.remove('open');
-    searchBtn.classList.remove('active-layer');
-  }
-
-  document.addEventListener('click', (e) => {
-    if (!searchPopover.contains(e.target) && e.target !== searchBtn) {
-      closeSearchPopover();
-    }
-  });
-  const importBtn = document.getElementById('importBtn');
-  const importOverlay = document.getElementById('importOverlay');
-
-  importBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    importOverlay.classList.add('open');
-  });
-  function closeImportModal() {
-    importOverlay.classList.remove('open');
-  }
-  function handleImportOverlayClick(e) {
-    if (e.target === importOverlay) closeImportModal();
-  }
-  // ── SAVE LAYER MODAL (polygon, area, draw) ──
-  document.addEventListener('DOMContentLoaded', () => {
-    const saveLayerOverlay = document.getElementById('saveLayerOverlay');
-    ['polygonBtn', 'areaBtn', 'drawBtn'].forEach(id => {
-      document.getElementById(id).addEventListener('click', (e) => {
-        e.stopPropagation();
-        saveLayerOverlay.classList.add('open');
-      });
-    });
-  });
-  function closeSaveLayerModal() {
-    saveLayerOverlay.classList.remove('open');
-  }
-  function handleSaveLayerOverlayClick(e) {
-    if (e.target === saveLayerOverlay) closeSaveLayerModal();
-  }
-
-  function toggleCheck(el) {
-    el.classList.toggle('checked');
-  }
-</script>
 
 <!-- SAVE LAYER MODAL -->
 <div class="import-overlay" id="saveLayerOverlay" onclick="handleSaveLayerOverlayClick(event)">
   <div class="import-modal" id="saveLayerModal">
     <div class="import-modal-body">
-      <h2 class="import-title">Salvar Nova Camada no Mapa</h2>
+      <h2 class="import-title" style="font-size:17px;">Salvar Nova Camada no Mapa</h2>
       <div class="import-field">
         <label class="import-label">Nome</label>
         <input type="text" class="import-input" style="height:52px;" placeholder="" />
@@ -1290,6 +1163,131 @@ function toggleSidebar() {
   const main = document.querySelector('.main');
   sidebar.classList.toggle('collapsed');
   if (main) main.classList.toggle('collapsed');
+}
+
+// ── LAYERS PANEL ──
+function toggleLayersPanel() {
+  const panel = document.getElementById('layersPanel');
+  const btn = document.getElementById('layersBtn');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    panel.classList.remove('open');
+    btn.classList.remove('active');
+  } else {
+    panel.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+// Close layers panel when clicking outside
+document.addEventListener('click', (e) => {
+  const panel = document.getElementById('layersPanel');
+  const btn = document.getElementById('layersBtn');
+  if (panel && !panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+    panel.classList.remove('open');
+    btn.classList.remove('active');
+  }
+  const dm = document.getElementById('datasModal');
+  const db = document.getElementById('datasBtn');
+  if (dm && !dm.contains(e.target) && db && !db.contains(e.target)) {
+    dm.classList.remove('open'); db.classList.remove('active');
+  }
+});
+
+// ── DATAS MODAL ──
+function toggleDatasModal() {
+  const modal = document.getElementById('datasModal');
+  const btn = document.getElementById('datasBtn');
+  const isOpen = modal.classList.contains('open');
+  if (isOpen) { modal.classList.remove('open'); btn.classList.remove('active'); }
+  else { modal.classList.add('open'); btn.classList.add('active'); }
+}
+function closeDatasModal() {
+  const modal = document.getElementById('datasModal');
+  if (modal) modal.classList.remove('open');
+  const btn = document.getElementById('datasBtn');
+  if (btn) btn.classList.remove('active');
+}
+function handleDatasOverlayClick(e) {}
+
+// ── SEARCH POPOVER ──
+const searchBtn = document.getElementById('searchBtn');
+const searchPopover = document.getElementById('searchPopover');
+
+searchBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = searchPopover.classList.contains('open');
+  closeSearchPopover();
+  if (!isOpen) {
+    searchPopover.classList.add('open');
+    searchBtn.classList.add('active-layer');
+    setTimeout(() => document.getElementById('searchInput').focus(), 50);
+  }
+});
+function closeSearchPopover() {
+  searchPopover.classList.remove('open');
+  searchBtn.classList.remove('active-layer');
+}
+document.addEventListener('click', (e) => {
+  if (!searchPopover.contains(e.target) && e.target !== searchBtn) closeSearchPopover();
+});
+
+// ── IMPORT MODAL ──
+const importBtn = document.getElementById('importBtn');
+const importOverlay = document.getElementById('importOverlay');
+importBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  importOverlay.classList.add('open');
+});
+function closeImportModal() { importOverlay.classList.remove('open'); }
+function handleImportOverlayClick(e) {
+  if (e.target === importOverlay) closeImportModal();
+}
+
+// ── SAVE LAYER MODAL (polygon, area, draw) ──
+document.addEventListener('DOMContentLoaded', () => {
+  const saveLayerOverlay = document.getElementById('saveLayerOverlay');
+  ['polygonBtn', 'areaBtn', 'drawBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      saveLayerOverlay.classList.add('open');
+    });
+  });
+});
+function closeSaveLayerModal() {
+  document.getElementById('saveLayerOverlay').classList.remove('open');
+}
+function handleSaveLayerOverlayClick(e) {
+  if (e.target === document.getElementById('saveLayerOverlay')) closeSaveLayerModal();
+}
+
+// ── LOCATE BUTTON ──
+const locateBtn = document.getElementById('locateBtn');
+const userLocation = document.getElementById('userLocation');
+locateBtn.addEventListener('click', () => {
+  locateBtn.classList.add('active-layer');
+  userLocation.style.top = '52%';
+  userLocation.style.left = '38%';
+  userLocation.classList.add('visible');
+  setTimeout(() => locateBtn.classList.remove('active-layer'), 800);
+});
+
+function toggleGroup(header) {
+  header.classList.toggle('collapsed');
+  header.nextElementSibling.classList.toggle('hidden');
+}
+function toggleLayer(item) {
+  item.classList.toggle('active');
+  item.classList.toggle('inactive');
+  updateCount();
+}
+function updateCount() {
+  const active = document.querySelectorAll('.layer-item.active').length;
+  document.getElementById('activeCount').textContent = active + ' camada' + (active !== 1 ? 's' : '') + ' ativa' + (active !== 1 ? 's' : '');
+}
+function toggleCheck(el) {
+  el.classList.toggle('checked');
 }
 </script>
 </body>
