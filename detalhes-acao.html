@@ -569,6 +569,84 @@
       transition: background 0.15s;
     }
     .nr-btn-save:hover { background: #e5572e; }
+
+    /* ── NOTIFICATIONS ── */
+    .topbar-right {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .notif-wrap { position: relative; }
+    .notif-btn {
+      width: 36px; height: 36px;
+      border: none; background: transparent;
+      cursor: pointer; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+      position: relative;
+    }
+    .notif-btn:hover { background: #f0f0ee; }
+    .notif-btn svg { width: 20px; height: 20px; }
+    .notif-dot {
+      position: absolute; top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      background: var(--brand-default);
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .notif-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 300px;
+      background: var(--neutral-white);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.07);
+      z-index: 500;
+      opacity: 0;
+      transform: translateY(-6px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      overflow: hidden;
+    }
+    .notif-panel.open {
+      opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+    }
+    .notif-panel-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 18px 18px 10px;
+    }
+    .notif-panel-header div h4 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .notif-panel-header div p { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+    .notif-x {
+      width: 24px; height: 24px; border: none; background: transparent;
+      cursor: pointer; border-radius: 5px; display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary); flex-shrink: 0; margin-top: 2px;
+      transition: background 0.12s;
+    }
+    .notif-x:hover { background: #f0f0ee; }
+    .notif-x svg { width: 14px; height: 14px; }
+    .notif-list { padding: 6px 12px 14px; display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; }
+    .notif-list::-webkit-scrollbar { width: 3px; }
+    .notif-list::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+    .notif-item {
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer;
+      transition: filter 0.12s;
+    }
+    .notif-item:hover { filter: brightness(0.97); }
+    .notif-item.alert { background: #faeeda; }
+    .notif-item.fire  { background: var(--error-bg, #fcebeb); }
+    .notif-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; }
+    .notif-content { display: flex; flex-direction: column; gap: 1px; }
+    .notif-type {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1px;
+    }
+    .notif-item.alert .notif-type { color: #ba7517; }
+    .notif-item.fire  .notif-type { color: var(--error-default, #a32d2d); }
+    .notif-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .notif-local { font-size: 12px; color: var(--text-secondary); }
   </style>
 </head>
 <body>
@@ -631,7 +709,70 @@
 <main class="main" id="main">
 
   <div class="topbar">
-    <div class="avatar">VB</div>
+
+    <!-- NOTIFICATION BELL -->
+    <div class="topbar-right">
+      <div class="notif-wrap" id="notifWrap">
+        <button class="notif-btn" id="notifBtn" onclick="toggleNotif(event)" title="Notificações">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel-header">
+            <div>
+              <h4>Notificações</h4>
+              <p>Referentes a sua área de atuação cadastrada.</p>
+            </div>
+            <button class="notif-x" onclick="toggleNotif(event)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="notif-list">
+            <div class="notif-item alert">
+              <svg class="notif-icon" viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div class="notif-content">
+                <span class="notif-type">Alerta de Incêndio</span>
+                <span class="notif-name">Nome do Incêndio</span>
+                <span class="notif-local">Porto Alegre</span>
+              </div>
+            </div>
+            <div class="notif-item fire">
+              <svg class="notif-icon" viewBox="0 0 24 24" fill="none" stroke="#a32d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 3-5 4.5-5 9a5 5 0 0 0 10 0c0-4.5-3.5-6-5-9z"/><path d="M12 9c-.8 2-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-1.2-2-2-4z"/></svg>
+              <div class="notif-content">
+                <span class="notif-type">Incêndio Detectado</span>
+                <span class="notif-name">Nome do Incêndio</span>
+                <span class="notif-local">Porto Alegre</span>
+              </div>
+            </div>
+            <div class="notif-item alert">
+              <svg class="notif-icon" viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div class="notif-content">
+                <span class="notif-type">Alerta de Incêndio</span>
+                <span class="notif-name">Nome do Incêndio</span>
+                <span class="notif-local">Porto Alegre</span>
+              </div>
+            </div>
+            <div class="notif-item fire">
+              <svg class="notif-icon" viewBox="0 0 24 24" fill="none" stroke="#a32d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 3-5 4.5-5 9a5 5 0 0 0 10 0c0-4.5-3.5-6-5-9z"/><path d="M12 9c-.8 2-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-1.2-2-2-4z"/></svg>
+              <div class="notif-content">
+                <span class="notif-type">Incêndio Detectado</span>
+                <span class="notif-name">Nome do Incêndio</span>
+                <span class="notif-local">Porto Alegre</span>
+              </div>
+            </div>
+            <div class="notif-item alert">
+              <svg class="notif-icon" viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div class="notif-content">
+                <span class="notif-type">Alerta de Incêndio</span>
+                <span class="notif-name">Nome do Incêndio</span>
+                <span class="notif-local">Porto Alegre</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="avatar">VB</div>
+    </div>
   </div>
 
   <div class="content">
@@ -910,6 +1051,17 @@ function closeNrModal() {
 function handleNrOverlay(e) {
   if (e.target === document.getElementById('nrOverlay')) closeNrModal();
 }
+
+function toggleNotif(e) {
+  e.stopPropagation();
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('notifWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('notifPanel').classList.remove('open');
+  }
+});
 </script>
 </body>
 </html>
