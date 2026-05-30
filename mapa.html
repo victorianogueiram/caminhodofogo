@@ -246,14 +246,14 @@
       transform: translate(-50%, -50%);
     }
     .map-marker-icon {
-      width: 52px; height: 52px;
+      width: 39px; height: 39px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       border: 2px solid rgba(255,255,255,0.9);
       box-shadow: 0 2px 12px rgba(0,0,0,0.25);
       position: relative;
     }
-    .map-marker-icon svg { width: 28px; height: 28px; }
+    .map-marker-icon svg { width: 21px; height: 21px; }
     /* Incêndio Detectado — Vermelho */
     .marker-detected { background: #d63031; animation: pulse-marker 2s infinite; }
     @keyframes pulse-marker {
@@ -1128,6 +1128,25 @@
     .marker-action-prevention { border-color: #2980b9; }
     .marker-action-monitoring { border-color: #c68410; }
     .marker-action-education  { border-color: #3a7d44; }
+
+    /* Alert markers */
+    .marker-alert-1 { background: #BA7517; animation: pulse-alert1 2s 0.2s infinite; }
+    .marker-alert-2 { background: #c68410; animation: pulse-alert2 2s 0.6s infinite; }
+    .marker-alert-3 { background: #d4920e; animation: pulse-alert3 2s 1.0s infinite; }
+    .marker-alert-4 { background: #BA7517; animation: pulse-alert1 2s 1.4s infinite; }
+    .marker-alert-5 { background: #c68410; animation: pulse-alert2 2s 1.8s infinite; }
+    @keyframes pulse-alert1 {
+      0%,100% { box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 4px rgba(186,117,23,0.3); }
+      50%      { box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 9px rgba(186,117,23,0.08); }
+    }
+    @keyframes pulse-alert2 {
+      0%,100% { box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 4px rgba(198,132,16,0.3); }
+      50%      { box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 9px rgba(198,132,16,0.08); }
+    }
+    @keyframes pulse-alert3 {
+      0%,100% { box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 4px rgba(212,146,14,0.3); }
+      50%      { box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 0 9px rgba(212,146,14,0.08); }
+    }
   </style>
 </head>
 <body>
@@ -1178,7 +1197,7 @@
   </a>
   <a href="#" class="nav-item">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M16 3.5a2 2 0 0 1 0 3.5"/></svg>
-    <span class="nav-label">Brigadistas</span><span class="tooltip">Brigadistas</span>
+    <span class="nav-label">Brigadas</span><span class="tooltip">Brigadas</span>
   </a>
 
   <div class="nav-spacer"></div>
@@ -1298,42 +1317,42 @@
 
     <!-- Markers -->
     <!-- Incêndio Detectado — Vermelho -->
-    <div class="map-marker" style="top:30%;left:38%">
+    <div class="map-marker" data-layer-group="incendios" style="top:30%;left:38%">
       <div class="map-marker-icon marker-detected"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="map-marker-label">Incêndio Detectado</div>
     </div>
     <!-- Incêndio Em Combate — Amarelo -->
-    <div class="map-marker" style="top:52%;left:58%">
+    <div class="map-marker" data-layer-group="incendios" style="top:52%;left:58%">
       <div class="map-marker-icon marker-combat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="map-marker-label">Em Combate</div>
     </div>
     <!-- Incêndio Controlado — Laranja -->
-    <div class="map-marker" style="top:22%;left:65%">
+    <div class="map-marker" data-layer-group="incendios" style="top:22%;left:65%">
       <div class="map-marker-icon marker-controlled"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="map-marker-label">Controlado</div>
     </div>
     <!-- Incêndio Extinto — Verde -->
-    <div class="map-marker" style="top:68%;left:28%">
+    <div class="map-marker" data-layer-group="incendios" style="top:68%;left:28%">
       <div class="map-marker-icon marker-extinguished"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="map-marker-label">Extinto</div>
     </div>
     <!-- Reignição — Azul -->
-    <div class="map-marker" style="top:44%;left:75%">
+    <div class="map-marker" data-layer-group="incendios" style="top:44%;left:75%">
       <div class="map-marker-icon marker-reignition"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="map-marker-label">Reignição</div>
     </div>
     <!-- Ação: Prevenção -->
-    <div class="map-marker" style="top:35%;left:55%">
+    <div class="map-marker" data-layer-group="acoes" style="top:35%;left:55%">
       <div class="map-marker-icon marker-action-prevention"><svg viewBox="0 0 24 24" fill="none" stroke="#0c447c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       <div class="map-marker-label">Prevenção</div>
     </div>
     <!-- Ação: Monitoramento -->
-    <div class="map-marker" style="top:62%;left:68%">
+    <div class="map-marker" data-layer-group="acoes" style="top:62%;left:68%">
       <div class="map-marker-icon marker-action-monitoring"><svg viewBox="0 0 24 24" fill="none" stroke="#7a4f00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
       <div class="map-marker-label">Monitoramento</div>
     </div>
     <!-- Ação: Educação Ambiental -->
-    <div class="map-marker" style="top:75%;left:50%">
+    <div class="map-marker" data-layer-group="acoes" style="top:75%;left:50%">
       <div class="map-marker-icon marker-action-education"><svg viewBox="0 0 24 24" fill="none" stroke="#3a7d44" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
       <div class="map-marker-label">Educação Ambiental</div>
     </div>
@@ -1384,6 +1403,27 @@
       <div class="map-marker-label">Retorno a Base</div>
     </div>
 
+    <!-- Alertas -->
+    <div class="map-marker" data-layer-group="alertas" style="top:18%;left:45%">
+      <div class="map-marker-icon marker-alert-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#ca)"><path d="M13.5257 1.79983C13.3818 1.51902 13.1633 1.28337 12.8941 1.11881C12.6249 0.954259 12.3155 0.867188 12 0.867188C11.6845 0.867188 11.3751 0.954259 11.1059 1.11881C10.8367 1.28337 10.6181 1.51902 10.4743 1.79983L1.04569 20.657C0.914186 20.9179 0.851577 21.2082 0.863807 21.5002C0.876037 21.7921 0.962701 22.0761 1.11557 22.3252C1.26844 22.5742 1.48243 22.7801 1.73723 22.9231C1.99203 23.0662 2.27918 23.1418 2.5714 23.1427H21.4285C21.7208 23.1418 22.0079 23.0662 22.2627 22.9231C22.5175 22.7801 22.7315 22.5742 22.8844 22.3252C23.0372 22.0761 23.1239 21.7921 23.1361 21.5002C23.1484 21.2082 23.0858 20.9179 22.9543 20.657L13.5257 1.79983Z" fill="white" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.57129V13.7141" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19.7143C12.4734 19.7143 12.8571 19.3305 12.8571 18.8571C12.8571 18.3838 12.4734 18 12 18C11.5266 18 11.1428 18.3838 11.1428 18.8571C11.1428 19.3305 11.5266 19.7143 12 19.7143Z" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="ca"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Alerta</div>
+    </div>
+    <div class="map-marker" data-layer-group="alertas" style="top:42%;left:30%">
+      <div class="map-marker-icon marker-alert-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#ca)"><path d="M13.5257 1.79983C13.3818 1.51902 13.1633 1.28337 12.8941 1.11881C12.6249 0.954259 12.3155 0.867188 12 0.867188C11.6845 0.867188 11.3751 0.954259 11.1059 1.11881C10.8367 1.28337 10.6181 1.51902 10.4743 1.79983L1.04569 20.657C0.914186 20.9179 0.851577 21.2082 0.863807 21.5002C0.876037 21.7921 0.962701 22.0761 1.11557 22.3252C1.26844 22.5742 1.48243 22.7801 1.73723 22.9231C1.99203 23.0662 2.27918 23.1418 2.5714 23.1427H21.4285C21.7208 23.1418 22.0079 23.0662 22.2627 22.9231C22.5175 22.7801 22.7315 22.5742 22.8844 22.3252C23.0372 22.0761 23.1239 21.7921 23.1361 21.5002C23.1484 21.2082 23.0858 20.9179 22.9543 20.657L13.5257 1.79983Z" fill="white" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.57129V13.7141" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19.7143C12.4734 19.7143 12.8571 19.3305 12.8571 18.8571C12.8571 18.3838 12.4734 18 12 18C11.5266 18 11.1428 18.3838 11.1428 18.8571C11.1428 19.3305 11.5266 19.7143 12 19.7143Z" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="ca"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Alerta</div>
+    </div>
+    <div class="map-marker" data-layer-group="alertas" style="top:60%;left:52%">
+      <div class="map-marker-icon marker-alert-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#ca)"><path d="M13.5257 1.79983C13.3818 1.51902 13.1633 1.28337 12.8941 1.11881C12.6249 0.954259 12.3155 0.867188 12 0.867188C11.6845 0.867188 11.3751 0.954259 11.1059 1.11881C10.8367 1.28337 10.6181 1.51902 10.4743 1.79983L1.04569 20.657C0.914186 20.9179 0.851577 21.2082 0.863807 21.5002C0.876037 21.7921 0.962701 22.0761 1.11557 22.3252C1.26844 22.5742 1.48243 22.7801 1.73723 22.9231C1.99203 23.0662 2.27918 23.1418 2.5714 23.1427H21.4285C21.7208 23.1418 22.0079 23.0662 22.2627 22.9231C22.5175 22.7801 22.7315 22.5742 22.8844 22.3252C23.0372 22.0761 23.1239 21.7921 23.1361 21.5002C23.1484 21.2082 23.0858 20.9179 22.9543 20.657L13.5257 1.79983Z" fill="white" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.57129V13.7141" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19.7143C12.4734 19.7143 12.8571 19.3305 12.8571 18.8571C12.8571 18.3838 12.4734 18 12 18C11.5266 18 11.1428 18.3838 11.1428 18.8571C11.1428 19.3305 11.5266 19.7143 12 19.7143Z" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="ca"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Alerta</div>
+    </div>
+    <div class="map-marker" data-layer-group="alertas" style="top:32%;left:70%">
+      <div class="map-marker-icon marker-alert-4"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#ca)"><path d="M13.5257 1.79983C13.3818 1.51902 13.1633 1.28337 12.8941 1.11881C12.6249 0.954259 12.3155 0.867188 12 0.867188C11.6845 0.867188 11.3751 0.954259 11.1059 1.11881C10.8367 1.28337 10.6181 1.51902 10.4743 1.79983L1.04569 20.657C0.914186 20.9179 0.851577 21.2082 0.863807 21.5002C0.876037 21.7921 0.962701 22.0761 1.11557 22.3252C1.26844 22.5742 1.48243 22.7801 1.73723 22.9231C1.99203 23.0662 2.27918 23.1418 2.5714 23.1427H21.4285C21.7208 23.1418 22.0079 23.0662 22.2627 22.9231C22.5175 22.7801 22.7315 22.5742 22.8844 22.3252C23.0372 22.0761 23.1239 21.7921 23.1361 21.5002C23.1484 21.2082 23.0858 20.9179 22.9543 20.657L13.5257 1.79983Z" fill="white" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.57129V13.7141" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19.7143C12.4734 19.7143 12.8571 19.3305 12.8571 18.8571C12.8571 18.3838 12.4734 18 12 18C11.5266 18 11.1428 18.3838 11.1428 18.8571C11.1428 19.3305 11.5266 19.7143 12 19.7143Z" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="ca"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Alerta</div>
+    </div>
+    <div class="map-marker" data-layer-group="alertas" style="top:72%;left:82%">
+      <div class="map-marker-icon marker-alert-5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#ca)"><path d="M13.5257 1.79983C13.3818 1.51902 13.1633 1.28337 12.8941 1.11881C12.6249 0.954259 12.3155 0.867188 12 0.867188C11.6845 0.867188 11.3751 0.954259 11.1059 1.11881C10.8367 1.28337 10.6181 1.51902 10.4743 1.79983L1.04569 20.657C0.914186 20.9179 0.851577 21.2082 0.863807 21.5002C0.876037 21.7921 0.962701 22.0761 1.11557 22.3252C1.26844 22.5742 1.48243 22.7801 1.73723 22.9231C1.99203 23.0662 2.27918 23.1418 2.5714 23.1427H21.4285C21.7208 23.1418 22.0079 23.0662 22.2627 22.9231C22.5175 22.7801 22.7315 22.5742 22.8844 22.3252C23.0372 22.0761 23.1239 21.7921 23.1361 21.5002C23.1484 21.2082 23.0858 20.9179 22.9543 20.657L13.5257 1.79983Z" fill="white" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.57129V13.7141" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19.7143C12.4734 19.7143 12.8571 19.3305 12.8571 18.8571C12.8571 18.3838 12.4734 18 12 18C11.5266 18 11.1428 18.3838 11.1428 18.8571C11.1428 19.3305 11.5266 19.7143 12 19.7143Z" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="ca"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Alerta</div>
+    </div>
     <!-- DATAS MODAL -->
     <div class="datas-modal-inner" id="datasModal">
       <h2 style="font-size:17px;font-weight:600;letter-spacing:-0.2px;">Filtrar Ações</h2>
@@ -1441,7 +1481,7 @@
                 <div class="layer-item-top">
                   <span class="layer-name">Alertas</span>
                   <label class="layer-switch">
-                    <input type="checkbox" checked onchange="toggleLayerSwitch(this)">
+                    <input type="checkbox" checked data-layer="alertas" onchange="toggleLayerSwitch(this)">
                     <span class="layer-switch-track"></span>
                   </label>
                 </div>
@@ -1451,9 +1491,9 @@
               </div>
               <div class="layer-item active">
                 <div class="layer-item-top">
-                  <span class="layer-name">Focos de Incêndio</span>
+                  <span class="layer-name">Incêndios</span>
                   <label class="layer-switch">
-                    <input type="checkbox" checked onchange="toggleLayerSwitch(this)">
+                    <input type="checkbox" checked data-layer="incendios" onchange="toggleLayerSwitch(this)">
                     <span class="layer-switch-track"></span>
                   </label>
                 </div>
@@ -1465,7 +1505,7 @@
                 <div class="layer-item-top">
                   <span class="layer-name">Ações</span>
                   <label class="layer-switch">
-                    <input type="checkbox" checked onchange="toggleLayerSwitch(this)">
+                    <input type="checkbox" checked data-layer="acoes" onchange="toggleLayerSwitch(this)">
                     <span class="layer-switch-track"></span>
                   </label>
                 </div>
@@ -1475,7 +1515,7 @@
               </div>
               <div class="layer-item active">
                 <div class="layer-item-top">
-                  <span class="layer-name">Brigadistas</span>
+                  <span class="layer-name">Brigadas</span>
                   <label class="layer-switch">
                     <input type="checkbox" checked onchange="toggleLayerSwitch(this)">
                     <span class="layer-switch-track"></span>
@@ -1804,11 +1844,21 @@ function toggleGroup(header) {
   header.nextElementSibling.classList.toggle('hidden');
 }
 function toggleLayerSwitch(checkbox) {
-  const item = checkbox.closest('.layer-item');
-  const isActive = checkbox.checked;
-  item.classList.toggle('active', isActive);
-  item.classList.toggle('inactive', !isActive);
-  updateCount();
+  const layerItem = checkbox.closest('.layer-item');
+  if (checkbox.checked) {
+    layerItem.classList.remove('inactive');
+    layerItem.classList.add('active');
+  } else {
+    layerItem.classList.remove('active');
+    layerItem.classList.add('inactive');
+  }
+  // Show/hide map markers by layer group
+  const layer = checkbox.getAttribute('data-layer');
+  if (layer) {
+    document.querySelectorAll(`.map-marker[data-layer-group="${layer}"]`).forEach(m => {
+      m.style.display = checkbox.checked ? '' : 'none';
+    });
+  }
 }
 function updateCount() {
   const active = document.querySelectorAll('.layer-item.active').length;
