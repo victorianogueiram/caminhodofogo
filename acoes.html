@@ -234,6 +234,12 @@
       border-right: 0.5px solid #d0cec9;
     }
     thead th:last-child { border-right: none; }
+    thead th.col-date,
+    tbody td.col-date {
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+    }
     tbody tr {
       border-bottom: 0.5px solid var(--neutral-border);
       transition: background 0.12s;
@@ -477,6 +483,96 @@
     .notif-item.fire  .notif-type { color: var(--error-default, #a32d2d); }
     .notif-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
     .notif-local { font-size: 12px; color: var(--text-secondary); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--neutral-white);
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      width: 100%;
+      max-width: 460px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transform: translateY(10px) scale(0.98);
+      transition: transform 0.2s ease;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
+    .modal-field { display: flex; flex-direction: column; gap: 6px; }
+    .modal-field label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .modal-select, .modal-input {
+      width: 100%;
+      border: 1px solid #c8c8c4;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--neutral-white);
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .modal-select:focus, .modal-input:focus { border-color: var(--brand-default); }
+    .modal-input::placeholder { color: #b0aea9; }
+    .modal-select-wrap { position: relative; }
+    .modal-select-wrap::after {
+      content: '';
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--text-secondary);
+      pointer-events: none;
+    }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .modal-input[type="date"] { cursor: pointer; }
+    .btn-gps {
+      display: inline-flex; align-items: center; gap: 7px;
+      border: 1.5px solid var(--brand-default);
+      color: var(--brand-default);
+      background: transparent;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      width: fit-content;
+    }
+    .btn-gps:hover { background: #fff0ec; }
+    .btn-gps svg { width: 14px; height: 14px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+    .btn-cancel {
+      padding: 9px 22px; border-radius: 999px;
+      border: 1.5px solid var(--brand-default);
+      background: transparent; color: var(--brand-default);
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #fff0ec; }
+    .btn-save {
+      padding: 9px 22px; border-radius: 999px; border: none;
+      background: var(--brand-default); color: white;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(255,102,65,0.3);
+      transition: background 0.15s;
+    }
+    .btn-save:hover { background: #e5572e; }
   </style>
 </head>
 <body>
@@ -636,9 +732,9 @@
 
     <!-- TABLE TOOLBAR -->
     <div class="table-toolbar">
-      <button class="btn-create">
+      <button class="btn-create" onclick="openCadastrarModal()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Criar Ação
+        Cadastrar Ação
       </button>
     </div>
 
@@ -648,8 +744,9 @@
         <thead>
           <tr>
             <th>Número</th>
-            <th>Início</th>
-            <th>Fim</th>
+            <th>Nome</th>
+            <th class="col-date">Início</th>
+            <th class="col-date">Fim</th>
             <th>Tipo de Ação</th>
             <th>Município</th>
             <th>Brigada</th>
@@ -659,8 +756,9 @@
         <tbody>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Operação Cerrado Vivo</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-blue">Educação Ambiental</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
@@ -691,8 +789,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Ação Serra do Roncador</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-orange">Combate a Incêndio</span></td>
             <td>Alto Paraíso de Goiás</td>
             <td>Nome da Brigada</td>
@@ -723,8 +822,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Operação Mata Limpa</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-green">Prevenção</span></td>
             <td>Alto Paraíso de Goiás</td>
             <td>Nome da Brigada</td>
@@ -755,8 +855,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Ação Rio das Almas</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-orange">Combate a Incêndio</span></td>
             <td>Alto Paraíso de Goiás</td>
             <td>Nome da Brigada</td>
@@ -787,8 +888,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Operação Chapada Verde</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-yellow">Monitoramento</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
@@ -819,8 +921,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Ação Buriti do Norte</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-blue">Educação Ambiental</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
@@ -851,8 +954,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Operação Vale do Araguaia</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-green">Prevenção</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
@@ -883,8 +987,9 @@
           </tr>
           <tr>
             <td>1234</td>
-            <td>05/05/2026 15:47</td>
-            <td>05/05/2026 15:47</td>
+            <td>Operação Campos Gerais</td>
+            <td class="col-date">05/05/2026</td>
+            <td class="col-date">05/05/2026</td>
             <td><span class="badge badge-orange">Combate a Incêndio</span></td>
             <td>Porto Alegre</td>
             <td>Nome da Brigada</td>
@@ -966,6 +1071,93 @@ document.addEventListener('click', (e) => {
     document.getElementById('notifPanel').classList.remove('open');
   }
 });
+
+function openCadastrarModal() {
+  document.getElementById('cadastrarModal').classList.add('open');
+}
+function closeCadastrarModal() {
+  document.getElementById('cadastrarModal').classList.remove('open');
+}
+document.addEventListener('click', (e) => {
+  const overlay = document.getElementById('cadastrarModal');
+  if (e.target === overlay) closeCadastrarModal();
+});
+
 </script>
+
+<!-- MODAL CADASTRAR AÇÃO -->
+<div class="modal-overlay" id="cadastrarModal">
+  <div class="modal">
+    <h2>Cadastrar Ação</h2>
+
+    <div class="modal-field">
+      <label>Tipo de Registro de Ação</label>
+      <div class="modal-select-wrap">
+        <select class="modal-select">
+          <option value="" disabled selected>Selecione</option>
+          <option>Combate a Incêndio</option>
+          <option>Educação Ambiental</option>
+          <option>Prevenção</option>
+          <option>Monitoramento</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-field">
+      <label>Status</label>
+      <div class="modal-select-wrap">
+        <select class="modal-select">
+          <option value="" disabled selected>Selecione</option>
+          <option>Em andamento</option>
+          <option>Concluída</option>
+          <option>Cancelada</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-field">
+      <label>Nome da Ação</label>
+      <input class="modal-input" type="text" placeholder="132.12424. -" />
+    </div>
+
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Iniciado em</label>
+        <input class="modal-input" type="date" />
+      </div>
+      <div class="modal-field">
+        <label>Finalizando em</label>
+        <input class="modal-input" type="date" />
+      </div>
+    </div>
+
+    <div class="modal-field">
+      <label>Coordenadas Geográficas</label>
+      <div class="modal-row">
+        <input class="modal-input" type="text" placeholder="132.12424. -" />
+        <input class="modal-input" type="text" placeholder="132.12424. -" />
+      </div>
+      <button class="btn-gps">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        Enviar com o GPS
+      </button>
+    </div>
+
+    <div class="modal-field">
+      <label>Selecione os brigadistas</label>
+      <div class="modal-select-wrap">
+        <select class="modal-select">
+          <option value="" disabled selected>Selecione</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeCadastrarModal()">Cancelar</button>
+      <button class="btn-save">Salvar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
