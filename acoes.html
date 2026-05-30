@@ -499,7 +499,7 @@
       border-radius: 16px;
       padding: 28px 28px 24px;
       width: 100%;
-      max-width: 460px;
+      max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
       display: flex;
@@ -530,7 +530,7 @@
     .modal-select:focus, .modal-input:focus { border-color: var(--brand-default); }
     .modal-input::placeholder { color: #b0aea9; }
     .modal-select-wrap { position: relative; }
-    .modal-select-wrap::after {
+    .modal-select-wrap:has(select)::after {
       content: '';
       position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
       width: 0; height: 0;
@@ -573,6 +573,69 @@
       transition: background 0.15s;
     }
     .btn-save:hover { background: #e5572e; }
+
+    /* ── CUSTOM TIPO SELECT ── */
+    .tipo-trigger {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px;
+      border: 1px solid #c8c8c4;
+      border-radius: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      background: var(--neutral-white);
+      transition: border-color 0.15s;
+      user-select: none;
+    }
+    .tipo-trigger:hover { border-color: #aaa; }
+    .tipo-trigger.open { border-color: var(--brand-default); }
+    .tipo-trigger-left { display: flex; align-items: center; gap: 10px; }
+    .tipo-trigger-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #f5f5f3;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tipo-trigger-icon svg { width: 16px; height: 16px; color: var(--text-secondary); }
+    .tipo-trigger-text { font-size: 14px; color: var(--text-secondary); font-family: 'Inter', sans-serif; }
+    .tipo-trigger-text.selected { color: var(--text-primary); }
+    .tipo-trigger-chevron { flex-shrink: 0; transition: transform 0.2s; }
+    .tipo-trigger.open .tipo-trigger-chevron { transform: rotate(180deg); }
+    .tipo-dropdown {
+      position: absolute; left: 0; right: 0;
+      top: calc(100% + 6px);
+      background: var(--neutral-white);
+      border: 0.5px solid var(--neutral-border);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      overflow: hidden;
+      z-index: 2000;
+      opacity: 0; pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .tipo-dropdown.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .tipo-option {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 0.5px solid var(--neutral-border);
+      transition: background 0.12s;
+    }
+    .tipo-option:last-child { border-bottom: none; }
+    .tipo-option:hover { background: #faf9f7; }
+    .tipo-option.active { background: var(--brand-light); }
+    .tipo-option-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: #f0efeb;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tipo-option.active .tipo-option-icon { background: #ffd5c8; }
+    .tipo-option-icon svg { width: 18px; height: 18px; }
+    .tipo-option-info { display: flex; flex-direction: column; gap: 1px; }
+    .tipo-option-name { font-size: 14px; font-weight: 500; color: var(--text-primary); font-family: 'Inter', sans-serif; }
+    .tipo-option.active .tipo-option-name { color: var(--brand-deeper); }
+    .tipo-option-desc { font-size: 12px; color: var(--text-secondary); font-family: 'Inter', sans-serif; }
   </style>
 </head>
 <body>
@@ -1083,6 +1146,36 @@ document.addEventListener('click', (e) => {
   if (e.target === overlay) closeCadastrarModal();
 });
 
+
+function toggleTipoDropdown() {
+  const trigger = document.getElementById('tipoTrigger');
+  const dropdown = document.getElementById('tipoDropdown');
+  trigger.classList.toggle('open');
+  dropdown.classList.toggle('open');
+}
+
+function selectTipo(el, name, desc) {
+  // Update trigger text
+  document.getElementById('tipoTriggerText').textContent = name;
+  document.getElementById('tipoTriggerText').classList.add('selected');
+  // Update trigger icon to match selected
+  document.getElementById('tipoTriggerIcon').innerHTML = el.querySelector('.tipo-option-icon').innerHTML;
+  // Mark active
+  document.querySelectorAll('.tipo-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  // Close
+  document.getElementById('tipoTrigger').classList.remove('open');
+  document.getElementById('tipoDropdown').classList.remove('open');
+}
+
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('tipoTrigger');
+  if (wrap && !wrap.contains(e.target) && !document.getElementById('tipoDropdown').contains(e.target)) {
+    document.getElementById('tipoTrigger').classList.remove('open');
+    document.getElementById('tipoDropdown').classList.remove('open');
+  }
+});
+
 </script>
 
 <!-- MODAL CADASTRAR AÇÃO -->
@@ -1092,14 +1185,54 @@ document.addEventListener('click', (e) => {
 
     <div class="modal-field">
       <label>Tipo de Registro de Ação</label>
-      <div class="modal-select-wrap">
-        <select class="modal-select">
-          <option value="" disabled selected>Selecione</option>
-          <option>Combate a Incêndio</option>
-          <option>Educação Ambiental</option>
-          <option>Prevenção</option>
-          <option>Monitoramento</option>
-        </select>
+      <div class="modal-select-wrap" style="position:relative;">
+        <div class="tipo-trigger" id="tipoTrigger" onclick="toggleTipoDropdown()">
+          <div class="tipo-trigger-left">
+            <div class="tipo-trigger-icon" id="tipoTriggerIcon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="14" y2="13"/></svg>
+            </div>
+            <span class="tipo-trigger-text" id="tipoTriggerText">Selecione</span>
+          </div>
+          <svg class="tipo-trigger-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="tipo-dropdown" id="tipoDropdown">
+          <div class="tipo-option" onclick="selectTipo(this, 'Combate a Incêndio', 'Supressão e controle')">
+            <div class="tipo-option-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#c0522a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 3-5 4.5-5 9a5 5 0 0 0 10 0c0-4.5-3.5-6-5-9z"/><path d="M12 9c-.8 2-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-1.2-2-2-4z"/></svg>
+            </div>
+            <div class="tipo-option-info">
+              <span class="tipo-option-name">Combate a Incêndio</span>
+              <span class="tipo-option-desc">Supressão e controle</span>
+            </div>
+          </div>
+          <div class="tipo-option" onclick="selectTipo(this, 'Educação Ambiental', 'Conscientização e capacitação')">
+            <div class="tipo-option-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3a7d44" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="tipo-option-info">
+              <span class="tipo-option-name">Educação Ambiental</span>
+              <span class="tipo-option-desc">Conscientização e capacitação</span>
+            </div>
+          </div>
+          <div class="tipo-option" onclick="selectTipo(this, 'Prevenção', 'Ações preventivas no território')">
+            <div class="tipo-option-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0c447c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="tipo-option-info">
+              <span class="tipo-option-name">Prevenção</span>
+              <span class="tipo-option-desc">Ações preventivas no território</span>
+            </div>
+          </div>
+          <div class="tipo-option" onclick="selectTipo(this, 'Monitoramento', 'Vigilância e detecção')">
+            <div class="tipo-option-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#7a4f00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div class="tipo-option-info">
+              <span class="tipo-option-name">Monitoramento</span>
+              <span class="tipo-option-desc">Vigilância e detecção</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1117,17 +1250,17 @@ document.addEventListener('click', (e) => {
 
     <div class="modal-field">
       <label>Nome da Ação</label>
-      <input class="modal-input" type="text" placeholder="132.12424. -" />
+      <input class="modal-input" type="text" placeholder="Ação Serra do Roncador" />
     </div>
 
     <div class="modal-row">
       <div class="modal-field">
         <label>Iniciado em</label>
-        <input class="modal-input" type="date" />
+        <input class="modal-input" type="datetime-local" />
       </div>
       <div class="modal-field">
         <label>Finalizando em</label>
-        <input class="modal-input" type="date" />
+        <input class="modal-input" type="datetime-local" />
       </div>
     </div>
 
