@@ -243,39 +243,62 @@
       position: absolute;
       display: flex; flex-direction: column; align-items: center;
       pointer-events: none;
+      transform: translate(-50%, -50%);
     }
-    .map-marker-dot {
-      width: 16px; height: 16px;
+    .map-marker-icon {
+      width: 52px; height: 52px;
       border-radius: 50%;
-      border: 2.5px solid white;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+      position: relative;
     }
-    .map-marker-dot.fire {
-      background: #a32d2d;
-      box-shadow: 0 0 0 3px rgba(163,45,45,0.35);
-      animation: pulse-fire 2s infinite;
+    .map-marker-icon svg { width: 28px; height: 28px; }
+    /* Incêndio Detectado — Vermelho */
+    .marker-detected { background: #d63031; animation: pulse-marker 2s infinite; }
+    @keyframes pulse-marker {
+      0%,100% { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 4px rgba(214,48,49,0.3); }
+      50%      { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 9px rgba(214,48,49,0.08); }
     }
-    .map-marker-dot.alert {
-      background: #ba7517;
-      box-shadow: 0 0 0 3px rgba(186,117,23,0.35);
-      animation: pulse-alert 2s 0.5s infinite;
+    /* Incêndio Em Combate — Amarelo */
+    .marker-combat { background: #e17c00; animation: pulse-combat 2s 0.4s infinite; }
+    @keyframes pulse-combat {
+      0%,100% { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 4px rgba(225,124,0,0.3); }
+      50%      { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 9px rgba(225,124,0,0.08); }
     }
-    @keyframes pulse-fire {
-      0%,100% { box-shadow: 0 0 0 3px rgba(163,45,45,0.35); }
-      50%      { box-shadow: 0 0 0 6px rgba(163,45,45,0.1); }
+    /* Incêndio Controlado — Laranja */
+    .marker-controlled { background: #ff6641; animation: pulse-controlled 2s 0.8s infinite; }
+    @keyframes pulse-controlled {
+      0%,100% { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 4px rgba(255,102,65,0.3); }
+      50%      { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 9px rgba(255,102,65,0.08); }
     }
-    @keyframes pulse-alert {
-      0%,100% { box-shadow: 0 0 0 3px rgba(186,117,23,0.35); }
-      50%      { box-shadow: 0 0 0 6px rgba(186,117,23,0.1); }
+    /* Incêndio Extinto — Verde */
+    .marker-extinguished { background: #27ae60; }
+    /* Reignição — Azul */
+    .marker-reignition { background: #2980b9; animation: pulse-reignition 2s 1.2s infinite; }
+    @keyframes pulse-reignition {
+      0%,100% { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 4px rgba(41,128,185,0.3); }
+      50%      { box-shadow: 0 2px 10px rgba(0,0,0,0.22), 0 0 0 9px rgba(41,128,185,0.08); }
     }
     .map-marker-label {
-      margin-top: 5px;
-      background: rgba(26,25,22,0.85);
+      margin-top: 7px;
+      background: rgba(26,25,22,0.82);
       color: white;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
-      padding: 3px 8px;
+      padding: 3px 9px;
       border-radius: 5px;
       white-space: nowrap;
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      pointer-events: none;
+    }
+    .map-marker { pointer-events: all; cursor: pointer; }
+    .map-marker:hover .map-marker-label {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ── MODAL OVERLAY ── */
@@ -1072,6 +1095,39 @@
     .notif-item.fire  .notif-type { color: var(--error-default, #a32d2d); }
     .notif-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
     .notif-local { font-size: 12px; color: var(--text-secondary); }
+
+    /* Action type markers */
+    .marker-action-combat      { background: #fde8df; }
+    .marker-action-prevention  { background: #ddeaf5; }
+    .marker-action-monitoring  { background: #faeeda; }
+    .marker-action-education   { background: #e4f0d8; }
+    .marker-action-combat .map-marker-icon,
+    .marker-action-prevention .map-marker-icon,
+    .marker-action-monitoring .map-marker-icon,
+    .marker-action-education .map-marker-icon { border-color: rgba(255,255,255,0.85); }
+
+    /* Point markers — light backgrounds */
+    .marker-fauna       { background: #fde8df; }
+    .marker-apoio       { background: #fde8df; }
+    .marker-agua        { background: #ddeaf5; }
+    .marker-trilha      { background: #e4f0d8; }
+    .marker-causa       { background: #f3eef8; }
+    .marker-ataque      { background: #fde8df; }
+    .marker-casa        { background: #e8e8e8; }
+    .marker-rescaldo    { background: #faeeda; }
+    .marker-retorno     { background: #e4f0d8; }
+
+    /* Dashed border for action markers */
+    .marker-action-prevention,
+    .marker-action-monitoring,
+    .marker-action-education {
+      background: white;
+      border: 2.5px dashed;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .marker-action-prevention { border-color: #2980b9; }
+    .marker-action-monitoring { border-color: #c68410; }
+    .marker-action-education  { border-color: #3a7d44; }
   </style>
 </head>
 <body>
@@ -1241,25 +1297,91 @@
     </div>
 
     <!-- Markers -->
-    <div class="map-marker" style="top:36%;left:40%">
-      <div class="map-marker-dot fire"></div>
-      <div class="map-marker-label">Incêndio detectado</div>
+    <!-- Incêndio Detectado — Vermelho -->
+    <div class="map-marker" style="top:30%;left:38%">
+      <div class="map-marker-icon marker-detected"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Incêndio Detectado</div>
     </div>
-    <div class="map-marker" style="top:52%;left:63%">
-      <div class="map-marker-dot fire"></div>
-      <div class="map-marker-label">Incêndio detectado</div>
+    <!-- Incêndio Em Combate — Amarelo -->
+    <div class="map-marker" style="top:52%;left:58%">
+      <div class="map-marker-icon marker-combat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Em Combate</div>
     </div>
-    <div class="map-marker" style="top:26%;left:55%">
-      <div class="map-marker-dot alert"></div>
-      <div class="map-marker-label">Alerta</div>
+    <!-- Incêndio Controlado — Laranja -->
+    <div class="map-marker" style="top:22%;left:65%">
+      <div class="map-marker-icon marker-controlled"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Controlado</div>
     </div>
-    <div class="map-marker" style="top:66%;left:33%">
-      <div class="map-marker-dot alert"></div>
-      <div class="map-marker-label">Alerta</div>
+    <!-- Incêndio Extinto — Verde -->
+    <div class="map-marker" style="top:68%;left:28%">
+      <div class="map-marker-icon marker-extinguished"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Extinto</div>
     </div>
-    <div class="map-marker" style="top:44%;left:72%">
-      <div class="map-marker-dot fire"></div>
-      <div class="map-marker-label">Incêndio detectado</div>
+    <!-- Reignição — Azul -->
+    <div class="map-marker" style="top:44%;left:75%">
+      <div class="map-marker-icon marker-reignition"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.0183 2.08984C16.8156 5.14285 19.9237 10.8483 19.7273 15.3916C19.6408 17.3572 18.9453 19.0697 17.6951 20.2881C16.4498 21.5016 14.5787 22.2979 11.9998 22.2979C11.9816 22.2979 11.9631 22.2986 11.9451 22.2998C10.9855 22.3619 10.0234 22.2313 9.11499 21.916C8.2065 21.6007 7.36985 21.1071 6.65503 20.4639C5.94016 19.8205 5.36089 19.0404 4.9519 18.1699C4.54292 17.2994 4.31211 16.3555 4.27319 15.3945C4.24851 14.3356 4.51331 13.2899 5.03882 12.3701C5.41921 11.7044 5.92665 11.1234 6.52808 10.6572C7.13464 11.7381 7.93149 12.704 8.88452 13.5049C9.21415 13.7819 9.69965 13.7666 10.0115 13.4697C11.6644 11.8955 12.3235 9.71664 12.3074 7.50977C12.2939 5.68126 11.8185 3.78841 11.0183 2.08984Z" fill="white" stroke="white" stroke-width="1.69048" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Reignição</div>
+    </div>
+    <!-- Ação: Prevenção -->
+    <div class="map-marker" style="top:35%;left:55%">
+      <div class="map-marker-icon marker-action-prevention"><svg viewBox="0 0 24 24" fill="none" stroke="#0c447c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="map-marker-label">Prevenção</div>
+    </div>
+    <!-- Ação: Monitoramento -->
+    <div class="map-marker" style="top:62%;left:68%">
+      <div class="map-marker-icon marker-action-monitoring"><svg viewBox="0 0 24 24" fill="none" stroke="#7a4f00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div class="map-marker-label">Monitoramento</div>
+    </div>
+    <!-- Ação: Educação Ambiental -->
+    <div class="map-marker" style="top:75%;left:50%">
+      <div class="map-marker-icon marker-action-education"><svg viewBox="0 0 24 24" fill="none" stroke="#3a7d44" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="map-marker-label">Educação Ambiental</div>
+    </div>
+
+    <!-- Ponto: Fauna Abatida -->
+    <div class="map-marker" style="top:20%;left:30%">
+      <div class="map-marker-icon marker-fauna"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c_fauna)"><path d="M2.57146 16.2854C3.51824 16.2854 4.28575 15.1342 4.28575 13.714C4.28575 12.2938 3.51824 11.1426 2.57146 11.1426C1.62469 11.1426 0.857178 12.2938 0.857178 13.714C0.857178 15.1342 1.62469 16.2854 2.57146 16.2854Z" fill="#DA2D26" stroke="#DA2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.71429 8.57157C8.66106 8.57157 9.42857 7.4203 9.42857 6.00014C9.42857 4.57998 8.66106 3.42871 7.71429 3.42871C6.76751 3.42871 6 4.57998 6 6.00014C6 7.4203 6.76751 8.57157 7.71429 8.57157Z" fill="#DA2D26" stroke="#DA2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.2858 8.57157C17.2326 8.57157 18.0001 7.4203 18.0001 6.00014C18.0001 4.57998 17.2326 3.42871 16.2858 3.42871C15.339 3.42871 14.5715 4.57998 14.5715 6.00014C14.5715 7.4203 15.339 8.57157 16.2858 8.57157Z" fill="#DA2D26" stroke="#DA2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.4286 16.2854C22.3754 16.2854 23.1429 15.1342 23.1429 13.714C23.1429 12.2938 22.3754 11.1426 21.4286 11.1426C20.4819 11.1426 19.7144 12.2938 19.7144 13.714C19.7144 15.1342 20.4819 16.2854 21.4286 16.2854Z" fill="#DA2D26" stroke="#DA2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.1429 17.1426C17.1429 19.5083 14.3657 20.5711 12 20.5711C9.63432 20.5711 6.85718 19.5083 6.85718 17.1426C6.85718 14.7769 8.57146 11.1426 12 11.1426C15.4286 11.1426 17.1429 14.7769 17.1429 17.1426Z" fill="#DA2D26" stroke="#DA2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="c_fauna"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Fauna Abatida</div>
+    </div>
+    <!-- Ponto: Ponto de Apoio -->
+    <div class="map-marker" style="top:40%;left:22%">
+      <div class="map-marker-icon marker-apoio"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.46432 8.46429C10.5946 8.46429 12.3215 6.73738 12.3215 4.60714C12.3215 2.4769 10.5946 0.75 8.46432 0.75C6.33408 0.75 4.60718 2.4769 4.60718 4.60714C4.60718 6.73738 6.33408 8.46429 8.46432 8.46429Z" stroke="#FF6641" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.1786 11.2246C9.0482 10.9636 7.87342 10.9616 6.7421 11.2186C5.61077 11.4756 4.55217 11.985 3.64545 12.7087C2.73872 13.4324 2.00733 14.3518 1.50594 15.398C1.00455 16.4442 0.746148 17.5902 0.750043 18.7503V21.3218H10.1786" stroke="#FF6641" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.1843 22.9841C17.996 23.0522 17.7898 23.0522 17.6015 22.9841C16.1718 22.4177 14.9451 21.4352 14.0801 20.1637C13.2151 18.8923 12.7518 17.3904 12.75 15.8527V13.6069C12.7425 13.4924 12.7595 13.3776 12.7998 13.2702C12.8402 13.1627 12.9031 13.0652 12.9843 12.984C13.0654 12.9029 13.163 12.84 13.2704 12.7996C13.3779 12.7592 13.4927 12.7422 13.6072 12.7498H22.1786C22.2931 12.7422 22.408 12.7592 22.5154 12.7996C22.6228 12.84 22.7204 12.9029 22.8015 12.984C22.8827 13.0652 22.9456 13.1627 22.986 13.2702C23.0264 13.3776 23.0433 13.4924 23.0358 13.6069V15.8527C23.034 17.3904 22.5707 18.8923 21.7057 20.1637C20.8408 21.4352 19.614 22.4177 18.1843 22.9841Z" fill="#FF6641" stroke="#FF6641" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Ponto de Apoio</div>
+    </div>
+    <!-- Ponto: Ponto de Água -->
+    <div class="map-marker" style="top:55%;left:35%">
+      <div class="map-marker-icon marker-agua"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.7142 15.4289C19.7142 11.1603 11.9999 0.857422 11.9999 0.857422C11.9999 0.857422 4.28564 11.1603 4.28564 15.4289C4.28564 17.4748 5.0984 19.437 6.54511 20.8837C7.99182 22.3304 9.95397 23.1431 11.9999 23.1431C14.0459 23.1431 16.008 22.3304 17.4548 20.8837C18.9015 19.437 19.7142 17.4748 19.7142 15.4289Z" fill="#0866FF" stroke="#0866FF" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="map-marker-label">Ponto de Água</div>
+    </div>
+    <!-- Ponto: Trilha -->
+    <div class="map-marker" style="top:28%;left:48%">
+      <div class="map-marker-icon marker-trilha"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c_trilha)"><mask id="p1_trilha" fill="white"><path d="M12 7.71456H4.28575L0.857178 4.28599L4.28575 0.857422H12"/></mask><path d="M12 7.71456H4.28575L0.857178 4.28599L4.28575 0.857422H12" fill="#009D44"/><path d="M12 9.71457C13.1046 9.71457 14 8.81913 14 7.71456C14 6.61 13.1046 5.71456 12 5.71456V7.71456V9.71457ZM4.28575 7.71456L2.87154 9.12878C3.24661 9.50385 3.75532 9.71457 4.28575 9.71457V7.71456ZM0.857178 4.28599L-0.557036 2.87178C-1.33808 3.65283 -1.33808 4.91916 -0.557036 5.70021L0.857178 4.28599ZM4.28575 0.857422V-1.14258C3.75532 -1.14258 3.24661 -0.931865 2.87154 -0.556792L4.28575 0.857422ZM12 2.85742C13.1046 2.85742 14 1.96199 14 0.857422C14 -0.247148 13.1046 -1.14258 12 -1.14258V0.857422V2.85742ZM12 7.71456V5.71456H4.28575V7.71456V9.71457H12V7.71456ZM4.28575 7.71456L5.69996 6.30035L2.27139 2.87178L0.857178 4.28599L-0.557036 5.70021L2.87154 9.12878L4.28575 7.71456ZM0.857178 4.28599L2.27139 5.70021L5.69996 2.27164L4.28575 0.857422L2.87154 -0.556792L-0.557036 2.87178L0.857178 4.28599ZM4.28575 0.857422V2.85742H12V0.857422V-1.14258H4.28575V0.857422Z" fill="#009D44" mask="url(#p1_trilha)"/><mask id="p3_trilha" fill="white"><path d="M12 12.8571H19.7143L23.1429 9.42857L19.7143 6H12"/></mask><path d="M12 12.8571H19.7143L23.1429 9.42857L19.7143 6H12" fill="#009D44"/><path d="M12 10.8571C10.8954 10.8571 10 11.7526 10 12.8571C10 13.9617 10.8954 14.8571 12 14.8571V12.8571V10.8571ZM19.7143 12.8571V14.8571C20.2447 14.8571 20.7534 14.6464 21.1285 14.2714L19.7143 12.8571ZM23.1429 9.42857L24.5571 10.8428C25.3381 10.0617 25.3381 8.79541 24.5571 8.01436L23.1429 9.42857ZM19.7143 6L21.1285 4.58579C20.7534 4.21071 20.2447 4 19.7143 4V6ZM12 4C10.8954 4 10 4.89543 10 6C10 7.10457 10.8954 8 12 8V6V4ZM12 12.8571V14.8571H19.7143V12.8571V10.8571H12V12.8571ZM19.7143 12.8571L21.1285 14.2714L24.5571 10.8428L23.1429 9.42857L21.7286 8.01436L18.3001 11.4429L19.7143 12.8571ZM23.1429 9.42857L24.5571 8.01436L21.1285 4.58579L19.7143 6L18.3001 7.41421L21.7286 10.8428L23.1429 9.42857ZM19.7143 6V4H12V6V8H19.7143V6Z" fill="#009D44" mask="url(#p3_trilha)"/><mask id="p5_trilha" fill="white"><path d="M12 18.0007H4.28575L0.857178 14.5721L4.28575 11.1436H12"/></mask><path d="M12 18.0007H4.28575L0.857178 14.5721L4.28575 11.1436H12" fill="#009D44"/><path d="M12 20.0007C13.1046 20.0007 14 19.1053 14 18.0007C14 16.8961 13.1046 16.0007 12 16.0007V18.0007V20.0007ZM4.28575 18.0007L2.87154 19.4149C3.24661 19.79 3.75532 20.0007 4.28575 20.0007V18.0007ZM0.857178 14.5721L-0.557036 13.1579C-1.33808 13.939 -1.33808 15.2053 -0.557036 15.9863L0.857178 14.5721ZM4.28575 11.1436V9.14355C3.75532 9.14355 3.24661 9.35427 2.87154 9.72934L4.28575 11.1436ZM12 13.1436C13.1046 13.1436 14 12.2481 14 11.1436C14 10.039 13.1046 9.14355 12 9.14355V11.1436V13.1436ZM12 18.0007V16.0007H4.28575V18.0007V20.0007H12V18.0007ZM4.28575 18.0007L5.69996 16.5865L2.27139 13.1579L0.857178 14.5721L-0.557036 15.9863L2.87154 19.4149L4.28575 18.0007ZM0.857178 14.5721L2.27139 15.9863L5.69996 12.5578L4.28575 11.1436L2.87154 9.72934L-0.557036 13.1579L0.857178 14.5721ZM4.28575 11.1436V13.1436H12V11.1436V9.14355H4.28575V11.1436Z" fill="#009D44" mask="url(#p5_trilha)"/><path d="M12 0.857422V23.1431" stroke="#000001" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="c_trilha"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Trilha</div>
+    </div>
+    <!-- Ponto: Indícios de Causa -->
+    <div class="map-marker" style="top:70%;left:60%">
+      <div class="map-marker-icon marker-causa"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aad" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></div>
+      <div class="map-marker-label">Indícios de Causa</div>
+    </div>
+    <!-- Ponto: Ataque -->
+    <div class="map-marker" style="top:48%;left:48%">
+      <div class="map-marker-icon marker-ataque"><svg viewBox="0 0 24 24" fill="none" stroke="#c0522a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8c-.8 1.5-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-1.2-2.5-2-4z" fill="#c0522a" stroke="none"/></svg></div>
+      <div class="map-marker-label">Ataque</div>
+    </div>
+    <!-- Ponto: Casa -->
+    <div class="map-marker" style="top:80%;left:38%">
+      <div class="map-marker-icon marker-casa"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#c_casa)"><path d="M19.5 23H4.5L4 12L12 4.5L20 12L19.5 23Z" fill="#616161" stroke="#616161"/><path d="M1 15L12 4L23 15M4.28569 11.9999V23.1428H19.7143V11.9999" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 23.1423V16.2852" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="c_casa"><rect width="24" height="24" fill="white"/></clipPath></defs></svg></div>
+      <div class="map-marker-label">Casa</div>
+    </div>
+    <!-- Ponto: Rescaldo -->
+    <div class="map-marker" style="top:25%;left:72%">
+      <div class="map-marker-icon marker-rescaldo"><svg viewBox="0 0 24 24" fill="none" stroke="#c68410" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8c1.5-2 3.5-2 5 0s3.5 2 5 0"/><path d="M5 14c1.5-2 3.5-2 5 0s3.5 2 5 0"/><path d="M5 20c1.5-2 3.5-2 5 0s3.5 2 5 0"/></svg></div>
+      <div class="map-marker-label">Rescaldo</div>
+    </div>
+    <!-- Ponto: Retorno a Base -->
+    <div class="map-marker" style="top:75%;left:75%">
+      <div class="map-marker-icon marker-retorno"><svg viewBox="0 0 24 24" fill="none" stroke="#3a7d44" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+      <div class="map-marker-label">Retorno a Base</div>
     </div>
 
     <!-- DATAS MODAL -->
