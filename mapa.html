@@ -160,6 +160,7 @@
     }
 
     .map-bg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -1213,7 +1214,13 @@
 
   <!-- MAP -->
   <div class="map-wrapper">
-    <img class="map-bg" src="https://www.figma.com/api/mcp/asset/a44ee334-db94-4426-9a7c-3d49ca041b2e" alt="Mapa de satélite" />
+    <iframe
+  class="map-bg"
+  src="https://www.openstreetmap.org/export/embed.html?bbox=-41.5%2C-12.5%2C-39.5%2C-10.5&amp;layer=hot&amp;marker=-11.5%2C-40.5"
+  style="border:none; width:100%; height:100%; position:absolute; top:0; left:0;"
+  allowfullscreen
+  loading="lazy"
+></iframe>
     <div class="map-overlay"></div>
 
     <!-- Left Toolbar -->
